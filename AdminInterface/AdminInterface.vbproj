@@ -1,0 +1,159 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D1A69DC8-7A14-4B73-BC5C-BEF1495528F3}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <StartupObject>AdminInterface.main</StartupObject>
+    <RootNamespace>AdminInterface</RootNamespace>
+    <AssemblyName>AdminInterface</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <MyType>Console</MyType>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DocumentationFile>AdminInterface.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DocumentationFile>AdminInterface.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionExplicit>On</OptionExplicit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionCompare>Binary</OptionCompare>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionStrict>Off</OptionStrict>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionInfer>On</OptionInfer>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="MySql.Data, Version=6.6.5.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+  </ItemGroup>
+  <ItemGroup>
+    <Import Include="Microsoft.VisualBasic" />
+    <Import Include="System" />
+    <Import Include="System.Collections" />
+    <Import Include="System.Collections.Generic" />
+    <Import Include="System.Data" />
+    <Import Include="System.Diagnostics" />
+    <Import Include="System.Linq" />
+    <Import Include="System.Xml.Linq" />
+    <Import Include="System.Threading.Tasks" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ArrayFunctions.vb" />
+    <Compile Include="class\cfg\AnnounceConfig.vb" />
+    <Compile Include="class\cfg\ConfigSerializer.vb" />
+    <Compile Include="class\cfg\CoreConfig.vb" />
+    <Compile Include="class\cfg\DynCommand.vb" />
+    <Compile Include="class\cfg\DyncommandConfig.vb" />
+    <Compile Include="class\Core.vb" />
+    <Compile Include="class\handler\backend\AnnounceHandler.vb" />
+    <Compile Include="class\handler\backend\Command.vb" />
+    <Compile Include="class\handler\backend\CommandHandler.vb" />
+    <Compile Include="class\handler\backend\commands\admin\CmdBan.vb" />
+    <Compile Include="class\handler\backend\commands\game\CmdBots.vb" />
+    <Compile Include="class\handler\backend\commands\game\CmdEndgame.vb" />
+    <Compile Include="class\handler\backend\commands\management\CmdFirst.vb" />
+    <Compile Include="class\handler\backend\commands\public\CmdInfo.vb" />
+    <Compile Include="class\handler\backend\commands\admin\CmdIpBan.vb" />
+    <Compile Include="class\handler\backend\commands\admin\CmdKick.vb" />
+    <Compile Include="class\handler\backend\commands\admin\CmdNameQuery.vb" />
+    <Compile Include="class\handler\backend\commands\public\CmdNextmap.vb" />
+    <Compile Include="class\handler\backend\commands\management\CmdPutgroup.vb" />
+    <Compile Include="class\handler\backend\commands\game\CmdSetNextMap.vb" />
+    <Compile Include="class\handler\backend\commands\game\CmdShutdown.vb" />
+    <Compile Include="class\handler\backend\commands\admin\CmdSwap.vb" />
+    <Compile Include="class\handler\backend\commands\admin\CmdTempban.vb" />
+    <Compile Include="class\handler\backend\commands\admin\CmdTempIpBan.vb" />
+    <Compile Include="class\handler\backend\commands\public\CmdTest.vb" />
+    <Compile Include="class\handler\MySQLHandler.vb" />
+    <Compile Include="class\handler\packets\GenericCommandPacket.vb" />
+    <Compile Include="class\handler\packets\PlayerlistPacket.vb" />
+    <Compile Include="class\handler\packets\ServerQueryPacket.vb" />
+    <Compile Include="class\handler\packets\TcpPacket.vb" />
+    <Compile Include="class\handler\backend\PlayerHandler.vb" />
+    <Compile Include="class\handler\ProcessMemoryReader.vb" />
+    <Compile Include="class\handler\RconClient.vb" />
+    <Compile Include="class\handler\template\IngameTemplate.vb" />
+    <Compile Include="class\sheduler\RepeatingShedulerTask.vb" />
+    <Compile Include="class\sheduler\Sheduler.vb" />
+    <Compile Include="class\sheduler\ShedulerTask.vb" />
+    <Compile Include="class\handler\struct\ServerInformation.vb" />
+    <Compile Include="class\handler\struct\User.vb" />
+    <Compile Include="module\Constants.vb" />
+    <Compile Include="module\Logger.vb" />
+    <Compile Include="class\handler\template\LogTemplate.vb" />
+    <Compile Include="module\main.vb" />
+    <Compile Include="My Project\AssemblyInfo.vb" />
+    <Compile Include="My Project\Application.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Application.myapp</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Resources.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Settings.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="My Project\Resources.resx">
+      <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="My Project\Application.myapp">
+      <Generator>MyApplicationCodeGenerator</Generator>
+      <LastGenOutput>Application.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="My Project\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <CustomToolNamespace>My</CustomToolNamespace>
+      <LastGenOutput>Settings.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
