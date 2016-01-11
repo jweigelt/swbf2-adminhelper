@@ -158,7 +158,7 @@ Public Class PlayerHandler
 
     Public Function FetchUserByNameMatch(ByVal needle As String) As User
         For Each p As User In Me.PlayerList
-            If p.UserName.Contains(needle) Then
+            If p.UserName.ToLower.Contains(needle.ToLower) Then
                 Me.AdminIface.MySQL.GetUserDetails(p)
                 Return p
             End If
