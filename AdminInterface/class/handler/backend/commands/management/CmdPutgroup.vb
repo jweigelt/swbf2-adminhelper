@@ -1,4 +1,18 @@
-﻿Public Class CmdPutGroup
+﻿'This file is part of SWBF2 SADS-Administation Helper.
+'
+'SWBF2 SADS-Administation Helper is free software: you can redistribute it and/or modify
+'it under the terms of the GNU General Public License as published by
+'the Free Software Foundation, either version 3 of the License, or
+'(at your option) any later version.
+
+'SWBF2 SADS-Administation Helper is distributed in the hope that it will be useful,
+'but WITHOUT ANY WARRANTY; without even the implied warranty of
+'MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+'GNU General Public License for more details.
+
+'You should have received a copy of the GNU General Public License
+'along with SWBF2 SADS-Administation Helper.  If not, see <http://www.gnu.org/licenses/>.
+Public Class CmdPutGroup
     Inherits Command
 
     Public Property OnPut As String = "%u was put into user group %g."
@@ -29,7 +43,7 @@
                 Return False
             End If
         End If
-      
+
         Dim affectedUser As User = Me.adminIface.PHandler.FetchUserByNameMatch(params(1))
         If affectedUser Is Nothing Then
             Me.Say(Me.ParseTemplate(Me.OnNoPlayerMatch, {params(1)}, {"e"}))
