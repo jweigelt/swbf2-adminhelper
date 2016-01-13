@@ -25,17 +25,10 @@ Public Class SQLiteHandler
     Public Property DbUser As String
     Public Property DbPwd As String
 
-    'Private connection As MySqlConnection
     Private connection As SQLite.SQLiteConnection
 
     Public Function Init() As Boolean
-        'connection = New MySqlConnection
-        connection = New SQLite.SQLiteConnection
-        Dim connectionString As String = String.Empty
-
-        connectionString = "Data Source=adminmod.db"
-
-        connection.ConnectionString = connectionString
+        connection = New SQLite.SQLiteConnection("Data Source=adminmod.db")
 
         Logger.Log(LogTemplate.MYSQL_CONNECT_TEST, LogLevel.info)
 
