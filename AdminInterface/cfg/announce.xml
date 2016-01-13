@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  SWBF2-AdminHelper 3.0
+  JW "LeKeks" 03/2015
+  Announce Configuration
+-->
+<AnnounceConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <!--delay between broadcasts (ms)-->
+  <AnnounceInterval>60000</AnnounceInterval>
+  
+  <!--
+    1 announce per Line
+    just uncomment or remove all items to disable the announce-sheduler
+    Note: announces which are longer then 100 chars will be splitted into several lines.
+  -->
+  <AnnounceList>
+	<Announce>You're playing on %s:name, Current map: %s:map, %t:h:%t:m (CET).</Announce>
+	<Announce>Next map: %s:nextmap.</Announce>
+	
+	<!--If you're feeling generous you might leave this one-->	
+	<Announce>Running %banner</Announce> 		
+  </AnnounceList>
+  
+  <!--
+	You can use some tags starting with a %.
+	These tags will be replaced using current status data if EnableVarParser is set to true.
+	Server vars:
+		ServerName:		s:name
+        MaxPlayers: 	s:maxplayers
+        NumPlayers		s:players
+        Version:		s:version
+        ServerIP:		s:ip
+        Heroes:			s:heroes
+        NextMap:		s:nextmap
+        CurrentMap:		s:map
+        FFEnabled:		s:ff
+		
+	Time:
+		Day				t:d
+		Month			t:c
+		Year			t:y
+		Hour			t:h
+		Minute			t:m
+		Second			t:s
+  -->
+  <EnableVarParser>true</EnableVarParser>
+  
+</AnnounceConfig>

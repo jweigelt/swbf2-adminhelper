@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  SWBF2-AdminHelper 3.0
+  JW "LeKeks" 03/2015
+  Command Configuration
+  Note: if you really mess up one of the configuration files just delete it and run the application,
+		it'll create a new, clean configuration file.
+-->
+<CmdNameQuery xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <!--std. header-->
+  <Permission>nquery</Permission>
+  <IsPublic>false</IsPublic>
+  <CommandAlias>nquery</CommandAlias>
+  
+  <OnQueryPM>[PM] %r rows matching %e found: %u</OnQueryPM>
+  <OnQuery> %r rows matching %e found: %u</OnQuery>
+  <OnSyntaxError>Syntax: !nquery &lt;user&gt; [-v &lt;public|pm&gt;] [-o &lt;asc|desc&gt;] [-c &lt;max rows&gt;] [-m &lt;key|ip&gt;] [-s &lt;chars&gt;]</OnSyntaxError>
+  <OnNoPlayerMatch>No player matching %e could be found!</OnNoPlayerMatch>
+  
+  <!--Default SQL search order (asc: ascending / desc: descending)-->
+  <DefaultOrder>asc</DefaultOrder>
+  <!--visibility mode if not specified-->
+  <DefaultVisibility>pm</DefaultVisibility>
+  <!--Max. rows if not specified-->
+  <DefaultMaxCount>20</DefaultMaxCount>
+  <!--chars for ip-matching if not specified-->
+  <DefaultIPChars>15</DefaultIPChars>
+  <!--Query mode if not specified (key: keyhash, ip: ip-address)-->
+  <DefaultQueryMode>key</DefaultQueryMode>
+  
+  <!--option to set the search oder-->
+  <OptionOrder>-o</OptionOrder>
+  <!--option to set the response visibility-->
+  <OptionVisibility>-v</OptionVisibility>
+  <!--option to set the max. row count-->
+  <OptionMaxCount>-c</OptionMaxCount>
+  <!--option to set the query method (key/ip)-->
+  <OptionQueryMethod>-m</OptionQueryMethod>
+  <!--option to set the ip-chars that have to equal for the row match-->
+  <OptionIPChars>-s</OptionIPChars>
+  
+</CmdNameQuery>

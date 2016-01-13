@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  SWBF2-AdminHelper 3.0
+  JW "LeKeks" 03/2015
+  Command Configuration
+  Note: if you really mess up one of the configuration files just delete it and run the application,
+		it'll create a new, clean configuration file.
+-->
+<CmdBan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <!--std. command header-->
+  <Permission>ban</Permission>		<!--permission alias (ai_permissions)-->
+  <IsPublic>false</IsPublic>		<!--execute without permission-->
+  <CommandAlias>ban</CommandAlias>	<!--ingame-alias-->
+  
+  <!--Message is shown when a user gets banned, a: admin, u: user-->
+  <OnBan>%u was banned by %a.</OnBan>
+  
+  <!--same as above but with a reason given (r)-->
+  <OnBanReason>%u was banned by %a for %r</OnBanReason>
+  
+  <!--Message is shown if the admin submitted an invalid command (e.g. no name specified)-->
+  <OnSyntaxError>Syntax: !ban &lt;user&gt; [&lt;key|pm&gt;] &lt;reason&gt;</OnSyntaxError>
+  
+  <!--no player found (e: search expression)-->
+  <OnNoPlayerMatch>No player matching %e could be found!</OnNoPlayerMatch>
+</CmdBan>

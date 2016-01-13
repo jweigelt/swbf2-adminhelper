@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  SWBF2-AdminHelper 3.0
+  JW "LeKeks" 03/2015
+  Command Configuration
+  Note: if you really mess up one of the configuration files just delete it and run the application,
+		it'll create a new, clean configuration file.
+-->
+<CmdKick xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Permission>kick</Permission>
+  <IsPublic>false</IsPublic>
+  <CommandAlias>kick</CommandAlias>
+  <OnKick>%u was kicked by %a.</OnKick>
+  <OnKickReason>%u was kicked by %a for %r</OnKickReason>
+  <OnSyntaxError>Syntax: !kick &lt;user&gt; &lt;reason&gt;</OnSyntaxError>
+  <OnNoPlayerMatch>No player matching %e could be found!</OnNoPlayerMatch>
+  <OnNoPermission>You can't kick %p (no permission).</OnNoPermission>
+</CmdKick>

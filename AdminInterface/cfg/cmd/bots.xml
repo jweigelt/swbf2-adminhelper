@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  SWBF2-AdminHelper 3.0
+  JW "LeKeks" 03/2015
+  Command Configuration
+  Note: if you really mess up one of the configuration files just delete it and run the application,
+		it'll create a new, clean configuration file.
+-->
+<CmdBots xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Permission>bots</Permission>
+  <IsPublic>false</IsPublic>
+  <CommandAlias>bots</CommandAlias>
+  <OnSet>%u set bot count to %c.</OnSet>
+  <OnSyntaxError>Syntax: !bots &lt;count&gt;</OnSyntaxError>
+  <OnToManyBots>%c exceeds max. count (%max)</OnToManyBots>
+  <MaxCount>16</MaxCount>
+</CmdBots>

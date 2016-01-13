@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  SWBF2-AdminHelper 3.0
+  JW "LeKeks" 03/2015
+  Core Configuration
+  Note: if you really mess up one of the configuration files just delete it and run the application,
+		it'll create a new, clean configuration file.
+-->
+<CoreConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <!--
+	Minimum level for messages to be shown / logged
+    debug:	 	0
+    info:		1
+    warning:	2
+    failure:	3
+    critical:	4
+	The program will exit if a critical error occurs.
+  -->
+  <MinLogLevel>1</MinLogLevel>
+  <LogToFile>true</LogToFile>		<!--write console output to file-->	
+  <LogFile>log.txt</LogFile>		<!--path to logfile (relative to main assembly)-->
+  <ExitOnError>false</ExitOnError>	<!--if this is set to true, the program will exit if a critical error occurs-->
+  
+  <!--Remote console server setup-->
+  <RconHostname>10.0.0.20</RconHostname>		<!--server's ip-address or hostname-->
+  <RconPort>4658</RconPort>						<!--server's >>Remote Console<< port (TCP, default: 4658)-->
+  <RconPassword>123</RconPassword>				<!--server's admin password-->
+  
+  <!--
+    set this to false if you want the playerlist to be fetched from memory
+    Fetching the list from the RAM is faster & more reliable then fetching it using the
+	server's remote console, however it does require local access to the server's process
+	Memory access does not work using mono.
+  -->
+  <RconPlayerHandling>true</RconPlayerHandling>	
+  
+  <!--These options require memory-access-->
+  <LoginAutoFetch>false</LoginAutoFetch>		<!--read the admin-password from memory-->
+  <LoginDisable>false</LoginDisable>			<!--disable ingame-login-->
+  
+  <!--
+    delay after serverlist-refresh (ms)
+	This value shouldn't be to low, especially if you're using your server's rcon to fetch the playerlist.
+	When reading the list from RAM you can go faster.
+	I'd recommend about 2000-5000ms using memory access and about 8000ms for using rcon access.
+  -->
+  <ListRefreshDelay>5000</ListRefreshDelay>	
+  
+  <!--only needed if memory-access is required, path to your server's main executable-->
+  <!--Note: If you use the memory-option every server has to have it's own executable-->
+  <ApplicationPath>F:\Programme\SWBF2-DS\BattlefrontII.exe</ApplicationPath>
+  
+  <!--Prefix for ingame-commands, you might want to change this to prevent incompatibility with other server managers-->
+  <CommandPrefix>!</CommandPrefix>
+  
+  <!--MySQL-server setup. MySQL is required for operation.-->
+  <!--To prepare the database, run adminmod.sql-->
+  <MySQLHostname>localhost</MySQLHostname>	<!--MySQL-server's IP or hostname-->
+  <MySQLPort>3306</MySQLPort>				<!--MySQL-server's port (3306 std.)-->
+  <MySQLUser>root</MySQLUser>				<!--MySQL-user-->
+  <MySQLPassword />							<!--User's password-->
+  <MySQLDatabase>adminmod</MySQLDatabase>	<!--database name-->
+  
+</CoreConfig>

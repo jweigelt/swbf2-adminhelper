@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  SWBF2-AdminHelper 3.0
+  JW "LeKeks" 03/2015
+  Command Configuration
+  Note: if you really mess up one of the configuration files just delete it and run the application,
+		it'll create a new, clean configuration file.
+-->
+<CmdIpBan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Permission>ipban</Permission>
+  <IsPublic>false</IsPublic>
+  <CommandAlias>ipban</CommandAlias>
+  <OnBan>%u was banned by %a.</OnBan>
+  <OnBanReason>%u was banned by %a for %r</OnBanReason>
+  <OnSyntaxError>Syntax: !ban &lt;user&gt; [&lt;key|pm&gt;] &lt;reason&gt;</OnSyntaxError>
+  <OnNoPlayerMatch>No player matching %e could be found!</OnNoPlayerMatch>
+</CmdIpBan>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DyncommandConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<!--
+  SWBF2-AdminHelper 3.0
+  JW "LeKeks" 03/2015
+  Dynamic/ user-defined command configuration
+  Note: if you really mess up one of the configuration files just delete it and run the application,
+		it'll create a new, clean configuration file.
+--> 
+
+ <!--This has to be set to true to enable user-defined commands-->
+ <EnableDyncommandHandler>true</EnableDyncommandHandler>
+  <Commands>
+    <DynCommand>
+	  
+      <Permission>hi</Permission>				<!--Name of the needed permission-->
+      <IsPublic>true</IsPublic>					<!--Allow public access-->
+      <CommandAlias>hi</CommandAlias>			<!--Ingame command-alias-->
+	  
+	  <!--
+		The command which will be executed.
+		Note: The slash in front of the command will be added so just use the command name!
+		Actions longer than 100 chars will be splitted into several rows to prevent the server from crashing
+ 	 -->
+	  <CommandAction>say Hi, [%p:group] %p:name, %t:d, %s:map</CommandAction> 
+	  <!--
+	    You can use some tags starting with a %.
+		These tags will be replaced using current status data if EnableVarParser is set to true.
+		Server vars:
+			ServerName:		s:name
+			MaxPlayers: 	s:maxplayers
+			NumPlayers		s:players
+			Version:		s:version
+			ServerIP:		s:ip
+			Heroes:			s:heroes
+			NextMap:		s:nextmap
+			CurrentMap:		s:map
+			FFEnabled:		s:ff
+		
+		Time:
+			Day				t:d
+			Month			t:c
+			Year			t:y
+			Hour			t:h
+			Minute			t:m
+			Second			t:s
+		
+		User:
+			Ingame-name:	p:name
+			Slot-ID			p:id
+			Usergroup: 		p:group
+			Kills:			p:kills
+			Ping:			p:ping
+			Team:			p:team
+	-->
+      <EnableVarParser>true</EnableVarParser>
+    </DynCommand>
+	
+	<!--You can add as many commands as you want, just use the DynCommand-tag with the syntax shown above-->
+	<!--
+		another example: this will drop "tat2g_eli" in case the map-rotation already contains this map,
+		add the map "tat2g_eli", set the next map to tat2g_eli and end the game afterwards.
+		This will effectively end the current game and load tat2g_eli.
+	-->
+	<DynCommand>  
+      <Permission>assault</Permission>		<!--Everyone who wants to access this commands will need the "assault"-permission-->
+      <IsPublic>false</IsPublic>			<!--we don't want this command to be public-->	
+      <CommandAlias>assault</CommandAlias>	<!--we'll be able to call it by using !assault-->
+	  <!--make sure not to use any whitespace for aligning these lines! Use \t / [TAB] only.-->
+	  <CommandAction>
+		removemap tat2g_eli
+		addmap tat2g_eli
+		endgame
+	  </CommandAction>
+      <EnableVarParser>false</EnableVarParser>	<!--We don't need the Varparser so we can just disable it-->
+    </DynCommand>
+	
+	<!--User(set groupid to NULL)- & Group-specific(set userid to NULL) permissions can be set in ai_permissions (SQL-Database)-->
+	
+  </Commands>
+</DyncommandConfig>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<IngameTemplate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<!--
+  SWBF2-AdminHelper 3.0
+  JW "LeKeks" 03/2015
+  Ingame-Template
+  Note: if you really mess up one of the configuration files just delete it and run the application,
+		it'll create a new, clean configuration file.
+-->  
+  <EnableOnRegisteredUserJoin>true</EnableOnRegisteredUserJoin>			<!--Show a message if a registered user joins-->
+  <EnableOnRegisteredPlayerJoin>true</EnableOnRegisteredPlayerJoin>		<!--Show a message if a player rejoins-->
+  <EnableOnNewPlayerJoin>true</EnableOnNewPlayerJoin>					<!--Show a message if a new player joins-->
+  <EnableOnBannedPlayerJoin>true</EnableOnBannedPlayerJoin>				<!--Show a message if a player gets autokicked-->
+  
+  <!--Messages for the actions described above-->
+  <OnRegisteredUserJoin>Welcome back [%g] %u!</OnRegisteredUserJoin>		<!--%g: user's group, %u user's name-->
+  <OnRegisteredPlayerJoin>Welcome back %u</OnRegisteredPlayerJoin>			<!--%u: player's name-->
+  <OnNewPlayerJoin>Welcome Player %u #%i on the server!</OnNewPlayerJoin>	<!--%u: player's name, %i: player's unique-id-->
+  <OnBannedPlayerJoin>Booting Player %u (banned).</OnBannedPlayerJoin>		<!--%u: player's name-->
+
+</IngameTemplate>

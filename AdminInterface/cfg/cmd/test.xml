@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  SWBF2-AdminHelper 3.0
+  JW "LeKeks" 03/2015
+  Command Configuration
+  Note: if you really mess up one of the configuration files just delete it and run the application,
+		it'll create a new, clean configuration file.
+-->
+<CmdTest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Permission>test</Permission>
+  <IsPublic>true</IsPublic>
+  <CommandAlias>test</CommandAlias>
+  <OnTestRegistered>You are User %u, Slot %s, User-ID: %i, Group: %g</OnTestRegistered>
+  <OnTestPlayer>You are User %u, Slot %s. You are not registered.</OnTestPlayer>
+</CmdTest>

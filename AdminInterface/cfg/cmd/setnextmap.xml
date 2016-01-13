@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  SWBF2-AdminHelper 3.0
+  JW "LeKeks" 03/2015
+  Command Configuration
+  Note: if you really mess up one of the configuration files just delete it and run the application,
+		it'll create a new, clean configuration file.
+-->
+<CmdSetNextMap xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Permission>setnextmap</Permission>
+  <IsPublic>false</IsPublic>
+  <CommandAlias>setnextmap</CommandAlias>
+  <OnSet>Next map was set to %m.</OnSet>
+  <OnSyntaxError>Syntax: !setnextmap &lt;mapname&gt;</OnSyntaxError>
+</CmdSetNextMap>
