@@ -25,7 +25,9 @@ Public Class Core
     Public Property DCSerializer As ConfigSerializer
     Public Property DCConfig As DyncommandConfig
 
-    Public Property MySQL As MySQLHandler
+    'Public Property MySQL As MySQLHandler
+    Public Property SQLite As SQLiteHandler
+    Public Property MySQL As SQLiteHandler
     Public Property IGTSerializer As ConfigSerializer
     Public Property IGTemplate As IngameTemplate
     Public Property MemReader As ProcessMemoryReader
@@ -46,7 +48,9 @@ Public Class Core
         Me.IGTSerializer = New ConfigSerializer(GetType(IngameTemplate))
         Me.DCSerializer = New ConfigSerializer(GetType(DyncommandConfig))
         Me.SyncSheduler = New Sheduler()
-        Me.MySQL = New MySQLHandler()
+        'Me.MySQL = New MySQLHandler()
+        Me.SQLite = New SQLiteHandler()
+        Me.MySQL = New SQLiteHandler()
         Me.PHandler = New PlayerHandler(Me)
         Me.CHandler = New CommandHandler(Me)
         Me.MemReader = New ProcessMemoryReader()

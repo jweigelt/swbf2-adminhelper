@@ -25,20 +25,17 @@ Public Class MySQLHandler
     Public Property DbUser As String
     Public Property DbPwd As String
 
-    'Private connection As MySqlConnection
-    Private connection As SQLite.SQLiteConnection
+    Private connection As MySqlConnection
 
     Public Function Init() As Boolean
-        'connection = New MySqlConnection
-        connection = New SQLite.SQLiteConnection
+        connection = New MySqlConnection
         Dim connectionString As String = String.Empty
-        connectionString = "server=" & _
-                            Me.Hostname & ";port=" & _
-                            Me.Port.ToString & ";uid = " & _
-                            Me.DbUser & ";pwd=" & _
-                            Me.DbPwd & ";database=" & _
+        connectionString = "server=" &
+                            Me.Hostname & ";port=" &
+                            Me.Port.ToString & ";uid = " &
+                            Me.DbUser & ";pwd=" &
+                            Me.DbPwd & ";database=" &
                             Me.DbName & ";"
-        connectionString = "Data Source=adminmod.db"
 
         connection.ConnectionString = connectionString
 
@@ -54,12 +51,9 @@ Public Class MySQLHandler
         Return False
     End Function
 
-    'Dim reader As MySqlDataReader = Nothing
-    Dim reader As SQLite.SQLiteDataReader = Nothing
-    'Public Function DoQuery(ByVal sql As String) As MySqlDataReader
-    Public Function DoQuery(ByVal sql As String) As SQLite.SQLiteDataReader
-        'Dim query As MySqlCommand = Nothing
-        Dim query As SQLite.SQLiteCommand = Nothing
+    Dim reader As MySqlDataReader = Nothing
+    Public Function DoQuery(ByVal sql As String) As MySqlDataReader
+        Dim query As MySqlCommand = Nothing
 
         Try
             Logger.Log("Query: " & sql, LogLevel.debug)
@@ -73,8 +67,7 @@ Public Class MySQLHandler
                 End While
             End If
 
-            'query = New MySqlCommand(sql)
-            query = New SQLite.SQLiteCommand(sql)
+            query = New MySqlCommand(sql)
             query.Connection = Me.connection
             query.Prepare()
 
@@ -91,8 +84,7 @@ Public Class MySQLHandler
     End Function
     Public Function NonQuery(ByVal sql As String) As Int32
         SyncLock Me.connection
-            'Dim query As MySqlCommand = Nothing
-            Dim query As SQLite.SQLiteCommand = Nothing
+            Dim query As MySqlCommand = Nothing
             Try
                 Logger.Log("Query: " & sql, LogLevel.debug)
 
@@ -100,8 +92,7 @@ Public Class MySQLHandler
                     Me.connection.Open()
                 End If
 
-                'query = New MySqlCommand(sql)
-                query = New SQLite.SQLiteCommand(sql)
+                query = New MySqlCommand(sql)
                 query.Connection = Me.connection
                 query.Prepare()
                 Return query.ExecuteNonQuery()
@@ -129,7 +120,7 @@ Public Class MySQLHandler
         dt.AddSeconds(timestamp).ToLocalTime()
         Return dt
     End Function
-    Private Function CheckForRows(ByVal res As SQLite.SQLiteDataReader) As Boolean
+    Private Function CheckForRows(ByVal res As MySqlDataReader) As Boolean
         If Not res Is Nothing Then
             res.Read()
             If res.HasRows Then
@@ -143,17 +134,17 @@ Public Class MySQLHandler
 
     Public Function PlayerExists(ByVal player As User) As Boolean
         Dim sql As String =
-            "select `id` from `" & Constants.MYSQL_PLAYERS_TABLE & "` " & _
+            "select `id` from `" & Constants.MYSQL_PLAYERS_TABLE & "` " &
             "where `keyhash` = '" & player.KeyHash & "' and `username` = '" & EscapeString(player.UserName) & "'"
         Return Me.CheckForRows(Me.DoQuery(sql))
     End Function
 
     Public Sub RegisterPlayer(ByVal player As User)
         Dim sql As String =
-            "insert into `" & Constants.MYSQL_PLAYERS_TABLE & "` set " & _
-             "`username`='" & EscapeString(player.UserName) & "', " & _
-             "`keyhash`='" & EscapeString(player.KeyHash) & "', " & _
-             "`lastip`='" & EscapeString(player.IPAddress.ToString) & "', " & _
+            "insert into `" & Constants.MYSQL_PLAYERS_TABLE & "` set " &
+             "`username`='" & EscapeString(player.UserName) & "', " &
+             "`keyhash`='" & EscapeString(player.KeyHash) & "', " &
+             "`lastip`='" & EscapeString(player.IPAddress.ToString) & "', " &
              "`lastseen` = NOW()"
         Me.NonQuery(sql)
     End Sub
@@ -163,7 +154,7 @@ Public Class MySQLHandler
                             "left join `" & Constants.MYSQL_GROUPS_TABLE & "` on " & "`" & Constants.MYSQL_GROUPS_TABLE & "`.`id` = " &
                             "`group` where `keyhash` = '" & player.KeyHash & "'"
 
-        Using res As SQLite.SQLiteDataReader = Me.DoQuery(sql)
+        Using res As MySqlDataReader = Me.DoQuery(sql)
             If res.HasRows Then
                 res.Read()
                 player.IsRegistered = True
@@ -178,7 +169,7 @@ Public Class MySQLHandler
     Public Sub GetPlayerDetails(ByRef player As User)
         Dim sql As String = "select * from `" & Constants.MYSQL_PLAYERS_TABLE & "` where `keyhash` = '" & player.KeyHash & "'"
 
-        Using res As SQLite.SQLiteDataReader = Me.DoQuery(sql)
+        Using res As MySqlDataReader = Me.DoQuery(sql)
             If res.HasRows Then
                 res.Read()
                 player.playerId = res("id")
@@ -189,16 +180,16 @@ Public Class MySQLHandler
 
     Public Function HasPermission(ByVal player As User, ByVal cmd As Command) As Boolean
         Dim sql As String =
-          "select `" & Constants.MYSQL_PERMISSIONS_TABLE & "`.`id` from `" & _
-                                 Constants.MYSQL_GROUPS_TABLE & "`, `" & _
-                                 Constants.MYSQL_PERMISSIONS_TABLE & "`, `" & _
-                                 Constants.MYSQL_USERS_TABLE & "` " & _
-          "where ((`" & Constants.MYSQL_GROUPS_TABLE & "`.`id` = `" & Constants.MYSQL_PERMISSIONS_TABLE & "`.`groupid` and `" & _
-                       Constants.MYSQL_USERS_TABLE & "`.`group` = `" & Constants.MYSQL_GROUPS_TABLE & "`.`id`) or `" & _
-                       Constants.MYSQL_USERS_TABLE & "`.`id` = `" & Constants.MYSQL_PERMISSIONS_TABLE & "`.`userid`) " & _
-          "and `" & Constants.MYSQL_USERS_TABLE & "`.`keyhash` = '" & EscapeString(player.KeyHash) & "' " & _
+          "select `" & Constants.MYSQL_PERMISSIONS_TABLE & "`.`id` from `" &
+                                 Constants.MYSQL_GROUPS_TABLE & "`, `" &
+                                 Constants.MYSQL_PERMISSIONS_TABLE & "`, `" &
+                                 Constants.MYSQL_USERS_TABLE & "` " &
+          "where ((`" & Constants.MYSQL_GROUPS_TABLE & "`.`id` = `" & Constants.MYSQL_PERMISSIONS_TABLE & "`.`groupid` and `" &
+                       Constants.MYSQL_USERS_TABLE & "`.`group` = `" & Constants.MYSQL_GROUPS_TABLE & "`.`id`) or `" &
+                       Constants.MYSQL_USERS_TABLE & "`.`id` = `" & Constants.MYSQL_PERMISSIONS_TABLE & "`.`userid`) " &
+          "and `" & Constants.MYSQL_USERS_TABLE & "`.`keyhash` = '" & EscapeString(player.KeyHash) & "' " &
           "and `" & Constants.MYSQL_PERMISSIONS_TABLE & "`.`alias` = '" & cmd.Permission & "'"
-        Using res As SQLite.SQLiteDataReader = Me.DoQuery(sql)
+        Using res As MySqlDataReader = Me.DoQuery(sql)
             Return Me.CheckForRows(res)
         End Using
     End Function
@@ -213,7 +204,7 @@ Public Class MySQLHandler
         sql &= "order by `id` " & order & " limit " & maxCount.ToString()
 
         Dim users As New List(Of String)
-        Using res As SQLite.SQLiteDataReader = Me.DoQuery(sql)
+        Using res As MySqlDataReader = Me.DoQuery(sql)
             While res.Read()
                 users.Add(res("username"))
             End While
@@ -230,7 +221,7 @@ Public Class MySQLHandler
             ", `admin` = " & admin.UserId &
             ", `duration` = " & duration.ToString &
             ", type = " & IIf(ipBan, "1", "0").ToString &
-            ", time = strftime('%s', 'now')"
+            ", time = UNIX_TIMESTAMP()"
         Me.NonQuery(sql)
     End Sub
 
@@ -239,9 +230,9 @@ Public Class MySQLHandler
         "right join `" & Constants.MYSQL_BANS_TABLE & "` on " & "`" & Constants.MYSQL_PLAYERS_TABLE & "`.`id` = `player`" &
         " where ((`keyhash` = '" & Me.EscapeString(player.KeyHash) & "' and `type` = 0) " &
         " or (`lastip` = '" & player.IPAddress.ToString() & "' and `type` = 1)) " &
-        " and (`time` + `duration` > strftime('%s', 'now') or `duration` < 0)"
+        " and (`time` + `duration` > UNIX_TIMESTAMP() or `duration` < 0)"
 
-        Using r As SQLite.SQLiteDataReader = Me.DoQuery(sql)
+        Using r As MySqlDataReader = Me.DoQuery(sql)
             If r.HasRows Then
                 r.Close()
                 Return True
@@ -254,14 +245,14 @@ Public Class MySQLHandler
 
     Public Sub RunCleanup()
         Logger.Log(LogTemplate.MYSQL_CLEANUP, LogLevel.info)
-        Dim sql As String = "delete from `" & Constants.MYSQL_BANS_TABLE & "` where `time` + `duration` < strftime('%s', 'now') and `duration` > 0"
+        Dim sql As String = "delete from `" & Constants.MYSQL_BANS_TABLE & "` where `time` + `duration` < UNIX_TIMESTAMP() and `duration` > 0"
         Me.NonQuery(sql)
     End Sub
 
     Public Function GetGroupId(ByVal name As String) As Int32
         name = EscapeString(name)
         Dim sql As String = "select `id` from `" & Constants.MYSQL_GROUPS_TABLE & "` where `groupname` = '" & name & "'"
-        Using res As SQLite.SQLiteDataReader = Me.DoQuery(sql)
+        Using res As MySqlDataReader = Me.DoQuery(sql)
             If res.HasRows Then
                 res.Read()
                 Return res("id")
@@ -278,16 +269,16 @@ Public Class MySQLHandler
 
     Public Function FirstUser() As Boolean
         Dim sql As String = "select `id` from `" & Constants.MYSQL_USERS_TABLE & "`"
-        Using res As SQLite.SQLiteDataReader = Me.DoQuery(sql)
+        Using res As MySqlDataReader = Me.DoQuery(sql)
             Return Not Me.CheckForRows(res)
         End Using
     End Function
 
     Public Sub RegisterUser(ByVal player As User)
         Dim sql As String =
-            "insert into `" & Constants.MYSQL_USERS_TABLE & "` set " & _
-             "`username`='" & EscapeString(player.UserName) & "', " & _
-             "`keyhash`='" & EscapeString(player.KeyHash) & "', " & _
+            "insert into `" & Constants.MYSQL_USERS_TABLE & "` set " &
+             "`username`='" & EscapeString(player.UserName) & "', " &
+             "`keyhash`='" & EscapeString(player.KeyHash) & "', " &
              "`group` = " & player.GroupId
         Me.NonQuery(sql)
     End Sub
