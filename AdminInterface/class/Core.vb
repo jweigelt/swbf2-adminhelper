@@ -74,8 +74,7 @@ Public Class Core
         End With
 
         'MemoryReader
-        'If Me.Config.MemReaderRequired Then
-        If False Then
+        If Me.Config.MemReaderRequired Then
             MemReader.ApplicationPath = Me.Config.ApplicationPath
             If Not MemReader.Init Then Return False
             If Me.Config.LoginAutoFetch Then
@@ -111,7 +110,7 @@ Public Class Core
 
         Me.Config.ServerInfo = queryPacket.ServerInfo
         With queryPacket
-            Logger.Log(LogTemplate.CORE_QUERY_INFO_OK, LogLevel.info, {.ServerInfo.ServerName,
+            Logger.Log(LogTemplate.CORE_QUERY_INFO_OK, LogLevel.info, { .ServerInfo.ServerName,
                                                                        .ServerInfo.Version,
                                                                        .ServerInfo.MaxPlayers})
         End With
