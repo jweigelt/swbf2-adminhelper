@@ -74,7 +74,8 @@ Public Class Core
         End With
 
         'MemoryReader
-        If Me.Config.MemReaderRequired Then
+        'If Me.Config.MemReaderRequired Then
+        If False Then
             MemReader.ApplicationPath = Me.Config.ApplicationPath
             If Not MemReader.Init Then Return False
             If Me.Config.LoginAutoFetch Then
