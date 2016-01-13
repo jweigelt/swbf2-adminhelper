@@ -138,12 +138,12 @@ Public Class SQLiteHandler
     End Function
 
     Public Sub RegisterPlayer(ByVal player As User)
-        Dim sql As String =
-            "insert into `" & Constants.MYSQL_PLAYERS_TABLE & "` set " &
-             "`username`='" & EscapeString(player.UserName) & "', " &
-             "`keyhash`='" & EscapeString(player.KeyHash) & "', " &
-             "`lastip`='" & EscapeString(player.IPAddress.ToString) & "', " &
-             "`lastseen` = NOW()"
+        Dim sql As String = "
+            INSERT INTO " & Constants.MYSQL_PLAYERS_TABLE & "
+            (username, keyhash, lastip, lastseen) VALUES
+            ('" & EscapeString(player.UserName) & "','" & EscapeString(player.KeyHash) & "','" &
+            EscapeString(player.IPAddress.ToString) & "',DateTime('now'))
+        "
         Me.NonQuery(sql)
     End Sub
 
@@ -214,21 +214,20 @@ Public Class SQLiteHandler
     Public Sub InsertBan(ByVal affectedUser As User, ByVal admin As User, ByVal ipBan As Boolean, Optional ByVal duration As Int16 = -1)
         Me.GetPlayerDetails(affectedUser)
         Me.GetUserDetails(admin)
-        Dim sql As String = "insert into `" & Constants.MYSQL_BANS_TABLE & "` set " &
-            "`player` = " & affectedUser.playerId &
-            ", `admin` = " & admin.UserId &
-            ", `duration` = " & duration.ToString &
-            ", type = " & IIf(ipBan, "1", "0").ToString &
-            ", time = strftime('%s', 'now')"
+        Dim sql As String = "
+            INSERT INTO " & Constants.MYSQL_BANS_TABLE & "
+            (player, admin, duration, `type`, `time`) VALUES
+            ('" & affectedUser.playerId & "','" & admin.UserId & "','" & duration.ToString & "','" & IIf(ipBan, "1", "0").ToString & "',DateTime('now'))
+        "
         Me.NonQuery(sql)
     End Sub
 
     Public Function IsBanned(ByVal player As User) As Boolean
-        Dim sql As String = "select `username` from `" & Constants.MYSQL_PLAYERS_TABLE & "` " &
-        "right join `" & Constants.MYSQL_BANS_TABLE & "` on " & "`" & Constants.MYSQL_PLAYERS_TABLE & "`.`id` = `player`" &
+        Dim sql As String = "select ai_bans.id from " & Constants.MYSQL_BANS_TABLE &
+        " left join " & Constants.MYSQL_PLAYERS_TABLE & " on " & Constants.MYSQL_BANS_TABLE & ".player =" & Constants.MYSQL_PLAYERS_TABLE & ".id" &
         " where ((`keyhash` = '" & Me.EscapeString(player.KeyHash) & "' and `type` = 0) " &
         " or (`lastip` = '" & player.IPAddress.ToString() & "' and `type` = 1)) " &
-        " and (`time` + `duration` > strftime('%s', 'now') or `duration` < 0)"
+        " and (`time` + `duration` > DateTime('now') or `duration` < 0)"
 
         Using r As SQLite.SQLiteDataReader = Me.DoQuery(sql)
             If r.HasRows Then
@@ -243,7 +242,7 @@ Public Class SQLiteHandler
 
     Public Sub RunCleanup()
         Logger.Log(LogTemplate.MYSQL_CLEANUP, LogLevel.info)
-        Dim sql As String = "delete from `" & Constants.MYSQL_BANS_TABLE & "` where `time` + `duration` < strftime('%s', 'now') and `duration` > 0"
+        Dim sql As String = "delete from `" & Constants.MYSQL_BANS_TABLE & "` where `time` + `duration` < DateTime('now') and `duration` > 0"
         Me.NonQuery(sql)
     End Sub
 
@@ -273,11 +272,11 @@ Public Class SQLiteHandler
     End Function
 
     Public Sub RegisterUser(ByVal player As User)
-        Dim sql As String =
-            "insert into `" & Constants.MYSQL_USERS_TABLE & "` set " &
-             "`username`='" & EscapeString(player.UserName) & "', " &
-             "`keyhash`='" & EscapeString(player.KeyHash) & "', " &
-             "`group` = " & player.GroupId
+        Dim sql As String = "
+            INSERT INTO " & Constants.MYSQL_USERS_TABLE & "
+            (username, keyhash, `group`) VALUES
+            ('" & EscapeString(player.UserName) & "','" & EscapeString(player.KeyHash) & "','" & player.GroupId & "')
+        "
         Me.NonQuery(sql)
     End Sub
 
