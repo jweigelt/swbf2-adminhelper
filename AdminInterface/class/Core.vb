@@ -25,9 +25,7 @@ Public Class Core
     Public Property DCSerializer As ConfigSerializer
     Public Property DCConfig As DyncommandConfig
 
-    'Public Property MySQL As MySQLHandler
-    Public Property SQLite As SQLiteHandler
-    Public Property MySQL As SQLiteHandler
+    Public Property SQL As SQLHandler
     Public Property IGTSerializer As ConfigSerializer
     Public Property IGTemplate As IngameTemplate
     Public Property MemReader As ProcessMemoryReader
@@ -48,9 +46,7 @@ Public Class Core
         Me.IGTSerializer = New ConfigSerializer(GetType(IngameTemplate))
         Me.DCSerializer = New ConfigSerializer(GetType(DyncommandConfig))
         Me.SyncSheduler = New Sheduler()
-        'Me.MySQL = New MySQLHandler()
-        Me.SQLite = New SQLiteHandler()
-        Me.MySQL = New SQLiteHandler()
+        Me.SQL = New SQLHandler()
         Me.PHandler = New PlayerHandler(Me)
         Me.CHandler = New CommandHandler(Me)
         Me.MemReader = New ProcessMemoryReader()
@@ -67,12 +63,19 @@ Public Class Core
         Me.IGTemplate = Me.IGTSerializer.loadFromFile(Constants.CFG_IGAMETEMPLATE, CurDir() & Constants.CFG_DIR)
         Me.DCConfig = Me.DCSerializer.loadFromFile(Constants.CFG_DYNCOMMAND, CurDir() & Constants.CFG_DIR)
 
-        With Me.MySQL
-            .Hostname = Me.Config.MySQLHostname
-            .Port = Me.Config.MySQLPort
-            .DbUser = Me.Config.MySQLUser
-            .DbPwd = Me.Config.MySQLPassword
-            .DbName = Me.Config.MySQLDatabase
+        With Me.SQL
+            If Me.Config.UseMySQL Then
+                .Hostname = Me.Config.MySQLHostname
+                .Port = Me.Config.MySQLPort
+                .DbUser = Me.Config.MySQLUser
+                .DbPwd = Me.Config.MySQLPassword
+                .DbName = Me.Config.SQLDatabase
+                .DbType = SQLHandler.DbTypes.MySQL
+            Else
+                .DbName = Me.Config.SQLDatabase
+                .DbType = SQLHandler.DbTypes.SQLite
+            End If
+
             If Not .Init() Then Return False
             .RunCleanup()
         End With
@@ -195,7 +198,7 @@ Public Class Core
         Logger.Log(LogTemplate.CORE_POSTINIT, LogLevel.debug)
         If Not Me.RCClient Is Nothing Then Me.RCClient.Terminate()
         If Not Me.PHandler Is Nothing Then Me.PHandler.Terminate()
-        If Not Me.MySQL Is Nothing Then Me.MySQL.Terminate()
+        If Not Me.SQL Is Nothing Then Me.SQL.Terminate()
         If Not Me.MemReader Is Nothing Then Me.MemReader.Terminate()
 
         Me.DCSerializer = Nothing

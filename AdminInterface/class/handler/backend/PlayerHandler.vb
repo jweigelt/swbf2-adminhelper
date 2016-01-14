@@ -79,8 +79,8 @@ Public Class PlayerHandler
                     Dim u As User = CheckForKeyhash(player, Me.PlayerList)
 
                     If u Is Nothing Then
-                        player.IsBanned = Me.AdminIface.MySQL.IsBanned(player)
-                        Me.AdminIface.MySQL.GetUserDetails(player)
+                        player.IsBanned = Me.AdminIface.SQL.IsBanned(player)
+                        Me.AdminIface.SQL.GetUserDetails(player)
                         Me.OnPlayerJoin(player)
                     Else
                         player.IsBanned = u.IsBanned
@@ -110,12 +110,12 @@ Public Class PlayerHandler
     Private Sub OnPlayerJoin(ByVal player As User)
         'trigger events for a new player
         RaiseEvent PlayerJoined(Me, player)
-        If Not Me.AdminIface.MySQL.PlayerExists(player) Then
-            Me.AdminIface.MySQL.RegisterPlayer(player)
+        If Not Me.AdminIface.SQL.PlayerExists(player) Then
+            Me.AdminIface.SQL.RegisterPlayer(player)
             RaiseEvent NewPlayerJoined(Me, player)
 
             If Me.AdminIface.IGTemplate.EnableOnNewPlayerJoin Then
-                Me.AdminIface.MySQL.GetPlayerDetails(player)
+                Me.AdminIface.SQL.GetPlayerDetails(player)
                 Me.AdminIface.RCClient.Say(
                 IngameTemplate.Parse(
                     Me.AdminIface.IGTemplate.OnNewPlayerJoin,
@@ -174,7 +174,7 @@ Public Class PlayerHandler
     Public Function FetchUserByNameMatch(ByVal needle As String) As User
         For Each p As User In Me.PlayerList
             If p.UserName.ToLower.Contains(needle.ToLower) Then
-                Me.AdminIface.MySQL.GetUserDetails(p)
+                Me.AdminIface.SQL.GetUserDetails(p)
                 Return p
             End If
         Next
@@ -182,6 +182,6 @@ Public Class PlayerHandler
     End Function
 
     Public Function HasPermission(ByVal player As User, ByVal cmd As Command)
-        Return Me.AdminIface.MySQL.HasPermission(player, cmd)
+        Return Me.AdminIface.SQL.HasPermission(player, cmd)
     End Function
 End Class

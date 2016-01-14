@@ -25,7 +25,7 @@ Public Class CmdTest
     End Sub
 
     Public Overrides Function Execute(ByVal commandStr As String, ByVal player As User) As Boolean
-        Me.adminIface.MySQL.GetUserDetails(player)
+        Me.adminIface.SQL.GetUserDetails(player)
         If player.IsRegistered Then
             Me.Say(Me.ParseTemplate(Me.OnTestRegistered,
            {player.UserName, player.SlotId.ToString(), player.UserId.ToString(), player.GroupName},

@@ -37,7 +37,7 @@ Public Class CmdPutGroup
 
         Dim groupId As Int32 = -1
         If NoGroupAlias <> params(2) Then
-            groupId = Me.adminIface.MySQL.GetGroupId(params(2))
+            groupId = Me.adminIface.SQL.GetGroupId(params(2))
             If groupId = -1 Then
                 Me.Say(Me.ParseTemplate(Me.OnNoGroupMatch, {params(2)}, {"e"}))
                 Return False
@@ -51,10 +51,10 @@ Public Class CmdPutGroup
         End If
 
         If Not affectedUser.IsRegistered Then
-            Me.adminIface.MySQL.RegisterUser(player)
+            Me.adminIface.SQL.RegisterUser(player)
         End If
 
-        Me.adminIface.MySQL.PutGroup(affectedUser.UserId, groupId)
+        Me.adminIface.SQL.PutGroup(affectedUser.UserId, groupId)
         Me.Say(Me.ParseTemplate(Me.OnPut, {affectedUser.UserName, Replace(params(2), "/", String.Empty)}, {"u", "g"}))
         Return True
     End Function

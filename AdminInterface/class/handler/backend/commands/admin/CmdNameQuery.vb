@@ -108,7 +108,7 @@ Public Class CmdNameQuery
             i += 1
         Next
 
-        Dim users As List(Of String) = Me.adminIface.MySQL.QueryNameList(affectedUser, order, maxCount, ipQuery, ipExpression)
+        Dim users As List(Of String) = Me.adminIface.SQL.QueryNameList(affectedUser, order, maxCount, ipQuery, ipExpression)
 
         Dim ofStr As String = String.Empty
         For Each uname As String In users

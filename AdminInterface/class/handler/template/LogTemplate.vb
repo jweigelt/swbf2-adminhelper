@@ -59,11 +59,12 @@ Public Class LogTemplate
     Public Const PROC_SET_PWD = "[MEMR] No rcon password set, setting a temp one."
     Public Const PROC_RM_PWD = "[MEMR] Disabling ingame login."
 
-    Public Const MYSQL_CONNECT_TEST = "[MYSQL] Testing MySQL-connection"
-    Public Const MYSQL_CONNECT_OK = "[MYSQL] MySQL OK"
-    Public Const MYSQL_CONNECT_FAIL = "[MYSQL] Couldn't connect to database"
-    Public Const MYSQL_CLOSE = "[MYSQL] Closing MySQL-connection"
-    Public Const MYSQL_CLEANUP = "[MYSQL] Cleaning database..."
+    Public Const SQL_TYPE = "[SQL] SQL Type: %s"
+    Public Const SQL_CONNECT_TEST = "[SQL] Testing SQL-connection"
+    Public Const SQL_CONNECT_OK = "[SQL] SQL OK"
+    Public Const SQL_CONNECT_FAIL = "[SQL] Couldn't connect to database"
+    Public Const SQL_CLOSE = "[SQL] Closing MySQL-connection"
+    Public Const SQL_CLEANUP = "[SQL] Cleaning database..."
 
     Public Const CMD_EXECUTED = "[CMH] '%s' issued command '%s'"
     Public Const CMD_NO_PERMISSION = "[CMH] '%s' tried to issue command '%s' "

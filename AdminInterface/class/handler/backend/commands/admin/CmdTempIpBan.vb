@@ -22,7 +22,7 @@ Public Class CmdTempIpBan
     End Sub
 
     Public Overrides Sub SubmitBan(ByVal affectedUser As User, ByVal player As User, ByVal duration As Int32)
-        Me.adminIface.MySQL.InsertBan(affectedUser, player, True, duration)
+        Me.adminIface.SQL.InsertBan(affectedUser, player, True, duration)
     End Sub
 
 End Class

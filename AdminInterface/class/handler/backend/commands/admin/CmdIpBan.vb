@@ -22,6 +22,6 @@ Public Class CmdIpBan
     End Sub
 
     Public Overrides Sub SubmitBan(ByVal affectedUser As User, ByVal player As User)
-        Me.adminIface.MySQL.InsertBan(affectedUser, player, True)
+        Me.adminIface.SQL.InsertBan(affectedUser, player, True)
     End Sub
 End Class

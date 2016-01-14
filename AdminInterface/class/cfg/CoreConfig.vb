@@ -35,7 +35,8 @@ Public Class CoreConfig
     Public Property MySQLPort As UInt16 = 3306
     Public Property MySQLUser As String = "root"
     Public Property MySQLPassword As String = ""
-    Public Property MySQLDatabase As String = "adminmod"
+    Public Property SQLDatabase As String = "adminmod"
+    Public Property UseMySQL As Boolean = False
 
     Public Property ListRefreshDelay As Int32 = 5000
     Public Property CommandPrefix As String = "!"

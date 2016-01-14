@@ -27,11 +27,11 @@ Public Class Constants
     Public Const CFG_ANNOUNCE As String = "/announce.xml"
     Public Const CFG_DYNCOMMAND As String = "/dyncommand.xml"
 
-    Public Const MYSQL_GROUPS_TABLE As String = "ai_groups"
-    Public Const MYSQL_PERMISSIONS_TABLE As String = "ai_permissions"
-    Public Const MYSQL_PLAYERS_TABLE As String = "ai_players"
-    Public Const MYSQL_USERS_TABLE As String = "ai_users"
-    Public Const MYSQL_BANS_TABLE As String = "ai_bans"
+    Public Const SQL_GROUPS_TABLE As String = "ai_groups"
+    Public Const SQL_PERMISSIONS_TABLE As String = "ai_permissions"
+    Public Const SQL_PLAYERS_TABLE As String = "ai_players"
+    Public Const SQL_USERS_TABLE As String = "ai_users"
+    Public Const SQL_BANS_TABLE As String = "ai_bans"
 
     Public Const CMD_EXIT As String = "exit"
 

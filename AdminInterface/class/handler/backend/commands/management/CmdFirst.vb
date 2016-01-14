@@ -26,10 +26,10 @@ Public Class CmdFirst
     End Sub
 
     Public Overrides Function Execute(ByVal commandStr As String, ByVal player As User) As Boolean
-        If Me.adminIface.MySQL.FirstUser Then
-            Me.adminIface.MySQL.RegisterUser(player)
-            Me.adminIface.MySQL.GetUserDetails(player)
-            Me.adminIface.MySQL.PutGroup(player.UserId, Me.UserGroup)
+        If Me.adminIface.SQL.FirstUser Then
+            Me.adminIface.SQL.RegisterUser(player)
+            Me.adminIface.SQL.GetUserDetails(player)
+            Me.adminIface.SQL.PutGroup(player.UserId, Me.UserGroup)
             Me.Say(Me.ParseTemplate(OnSet, {player.UserName}, {"u"}))
             Return True
         Else

@@ -161,7 +161,6 @@
     <Compile Include="class\handler\backend\commands\admin\CmdTempban.vb" />
     <Compile Include="class\handler\backend\commands\admin\CmdTempIpBan.vb" />
     <Compile Include="class\handler\backend\commands\public\CmdTest.vb" />
-    <Compile Include="class\handler\MySQLHandler.vb" />
     <Compile Include="class\handler\packets\GenericCommandPacket.vb" />
     <Compile Include="class\handler\packets\PlayerlistPacket.vb" />
     <Compile Include="class\handler\packets\ServerQueryPacket.vb" />
@@ -169,6 +168,7 @@
     <Compile Include="class\handler\backend\PlayerHandler.vb" />
     <Compile Include="class\handler\ProcessMemoryReader.vb" />
     <Compile Include="class\handler\RconClient.vb" />
+    <Compile Include="class\handler\database\SQLHandler.vb" />
     <Compile Include="class\handler\template\IngameTemplate.vb" />
     <Compile Include="class\sheduler\RepeatingShedulerTask.vb" />
     <Compile Include="class\sheduler\Sheduler.vb" />
@@ -194,7 +194,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="class\handler\SQLiteHandler.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">

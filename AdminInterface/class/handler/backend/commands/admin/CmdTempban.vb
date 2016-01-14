@@ -60,6 +60,6 @@ Public Class CmdTempBan
     End Function
 
     Public Overridable Sub SubmitBan(ByVal affectedUser As User, ByVal player As User, ByVal duration As Int32)
-        Me.adminIface.MySQL.InsertBan(affectedUser, player, False, duration)
+        Me.adminIface.SQL.InsertBan(affectedUser, player, False, duration)
     End Sub
 End Class
