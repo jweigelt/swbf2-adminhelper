@@ -31,4 +31,22 @@ Public Class User
     Public Property GroupName As String = "-"
     Public Property UserId As Int32 = -1
     Public Property playerId As Int32 = -1
+
+    Public Property IsSuperAdmin As Boolean = False
+
+    Public Shared Function GetSuperAdmin() As User
+        Dim su As User = New User
+        su.UserName = "SuperAdmin"
+        su.IsBanned = False
+        su.IsRegistered = True
+        su.GroupName = "SuperAdmin"
+        su.IsSuperAdmin = True
+        su.TeamId = 0
+        su.TeamName = "NA"
+        su.Kills = 0
+        su.Deaths = 0
+        su.Ping = 0
+        su.Points = 0
+        Return su
+    End Function
 End Class

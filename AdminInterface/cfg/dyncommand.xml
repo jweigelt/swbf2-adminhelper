@@ -72,10 +72,17 @@
 		addmap tat2g_eli
 		endgame
 	  </CommandAction>
-      <EnableVarParser>false</EnableVarParser>	<!--We don't need the Varparser so we can just disable it-->
-    </DynCommand>
+    <EnableVarParser>false</EnableVarParser>	<!--We don't need the Varparser so we can just disable it-->
+  </DynCommand>
+  <DynCommand>
+    <Permission>say</Permission>
+    <IsPublic>false</IsPublic>
+    <CommandAlias>say</CommandAlias>
+    <CommandAction>say %p:input</CommandAction>
+    <EnableVarParser>true</EnableVarParser>
+  </DynCommand>
 	
 	<!--User(set groupid to NULL)- & Group-specific(set userid to NULL) permissions can be set in ai_permissions (SQL-Database)-->
 	
-  </Commands>
+</Commands>
 </DyncommandConfig>

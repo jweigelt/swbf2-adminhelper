@@ -247,10 +247,25 @@ Public Class RconClient
     End Sub
 
     Public Sub Say(ByVal str As String)
+        SendMessage(str, Nothing)
+    End Sub
+
+    Public Sub Warn(ByVal str As String, ByVal user As User)
+        SendMessage(str, user)
+    End Sub
+
+    Public Sub SendMessage(ByVal str As String, ByVal user As User)
         'Sending more then 100 chars will crash the server
         '-> fragment it
+        Dim cmd As String
+        If Not user Is Nothing Then
+            cmd = "/warn " & user.SlotId.ToString() & " "
+        Else
+            cmd = "/say "
+        End If
+
         If str.Length <= 100 Then
-            Me.Send("/say " & str)
+            Me.Send(cmd & str)
             Exit Sub
         End If
         Dim cache As String = str
@@ -267,7 +282,7 @@ Public Class RconClient
             End If
         End While
         For Each line As String In lines
-            Me.Send("/say " & line)
+            Me.Send(cmd & line)
         Next
     End Sub
 End Class

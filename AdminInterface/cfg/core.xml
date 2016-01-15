@@ -51,7 +51,7 @@
   <ApplicationPath>F:\Programme\SWBF2-DS\BattlefrontII.exe</ApplicationPath>
   
   <!--Prefix for ingame-commands, you might want to change this to prevent incompatibility with other server managers-->
-  <CommandPrefix>!</CommandPrefix>
+  <CommandPrefix>#</CommandPrefix>
   
   <!--MySQL-server setup. MySQL is required for operation.-->
   <!--To prepare the database, run adminmod.sql-->

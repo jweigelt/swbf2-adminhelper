@@ -44,19 +44,23 @@ Public Class DynCommand
             'Dynamic variables
             'Parsing text takes a bit of processing time so it can be disabled
             If Me.EnableVarParser Then
+                Dim list As List(Of String) = commandStr.Split(" ").ToList()
+                list.RemoveAt(0)
+                Dim restOfCommand As String = String.Join(" ", list.ToArray)
                 row = Me.ParseTemplate(row,
                                  {player.UserName,
                                   player.SlotId.ToString(),
                                   player.GroupName.ToString(),
                                   player.Kills.ToString(),
                                   player.Ping.ToString(),
-                                  player.TeamName.ToString()},
-                                 {"p:name", "p:id", "p:group", "p:kills", "p:ping", "p:team"})
+                                  player.TeamName.ToString(),
+                                  restOfCommand},
+                                 {"p:name", "p:id", "p:group", "p:kills", "p:ping", "p:team", "p:input"})
 
                 'Serverinfo (queried after Map-reloads)
                 With Me.adminIface.Config.ServerInfo
                     row = Me.ParseTemplate(row,
-                               {.ServerName,
+                               { .ServerName,
                                 .MaxPlayers,
                                 .Version,
                                 .ServerIP,

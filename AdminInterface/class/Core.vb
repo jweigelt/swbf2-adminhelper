@@ -168,7 +168,9 @@ Public Class Core
         While running
             Dim cmd As String = Console.ReadLine
             If cmd.Length > 1 Then
-                If cmd(0) = "/" Then
+                If cmd(0) = Config.CommandPrefix Then
+                    CHandler.HandleCommand(Mid(cmd, 2), User.GetSuperAdmin)
+                ElseIf cmd(0) = "/" Then
                     Dim p As New GenericCommandPacket
                     p.CommandAlias = Mid(cmd, 2)
                     Me.SyncSheduler.PushTask(New ShedulerTask(AddressOf Me.SendUserPacket, p))

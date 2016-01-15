@@ -33,16 +33,26 @@ Public Class CommandHandler
     Public Sub HandleCommand(ByVal commandStr As String, ByVal playerName As String)
         Dim player As User = Me.AdminIface.PHandler.FetchUserByName(playerName)
         If player Is Nothing Then Return
+        HandleCommand(commandStr, player)
+    End Sub
+
+    Public Sub HandleCommand(ByVal commandStr As String, ByVal player As User)
+        If player Is Nothing Then Return
         Dim commandAlias As String = Split(commandStr, " ")(0)
 
         For Each cmd As Command In Me.Commands
+            If player.IsSuperAdmin Then
+                cmd.BySuperAdmin = True
+            Else
+                cmd.BySuperAdmin = False
+            End If
             If cmd.CommandAlias.Contains(commandAlias) Then
                 If Me.AdminIface.PHandler.HasPermission(player, cmd) Or cmd.IsPublic Then
-                    Logger.Log(LogTemplate.CMD_EXECUTED, LogLevel.info, playerName, commandStr)
+                    Logger.Log(LogTemplate.CMD_EXECUTED, LogLevel.info, player.UserName, commandStr)
                     Me.AdminIface.SyncSheduler.PushTask(New ShedulerTask(AddressOf Me.CommandProxy, {cmd, commandStr, player}))
                     Return
                 Else
-                    Logger.Log(LogTemplate.CMD_NO_PERMISSION, LogLevel.info, playerName, commandStr)
+                    Logger.Log(LogTemplate.CMD_NO_PERMISSION, LogLevel.info, player.UserName, commandStr)
                     Return
                 End If
                 Return

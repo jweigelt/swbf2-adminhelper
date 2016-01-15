@@ -182,6 +182,7 @@ Public Class PlayerHandler
     End Function
 
     Public Function HasPermission(ByVal player As User, ByVal cmd As Command)
+        If player.IsSuperAdmin Then Return True
         Return Me.AdminIface.SQL.HasPermission(player, cmd)
     End Function
 End Class
