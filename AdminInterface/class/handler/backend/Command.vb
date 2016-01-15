@@ -20,7 +20,7 @@ Public Class Command
     Public Property CommandAlias As String
     Public Property BySuperAdmin As Boolean = False
 
-    <Xml.Serialization.XmlIgnore> _
+    <Xml.Serialization.XmlIgnore>
     Public Property adminIface As Core
 
     Public Overridable Function Execute(ByVal commandStr As String, ByVal player As User) As Boolean
