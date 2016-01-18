@@ -152,6 +152,7 @@ Public Class Core
             .RegisterCommand(GetType(CmdStats), "stats")
             .RegisterCommand(GetType(CmdTimer), "timer")
             .RegisterCommand(GetType(CmdRestart), "restart")
+            .RegisterCommand(GetType(CmdScore), "score")
             If Me.DCConfig.EnableDyncommandHandler Then
                 For Each c As DynCommand In Me.DCConfig.Commands
                     Logger.Log(LogTemplate.CMD_DYN_REG, LogLevel.info, c.CommandAlias)

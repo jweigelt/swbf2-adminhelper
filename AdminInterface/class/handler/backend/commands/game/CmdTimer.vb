@@ -1,8 +1,6 @@
 ﻿Public Class CmdTimer
     Inherits Command
 
-    Public Property StatsStr As String = "Points: %p, Kills: %k, Deaths: %d, K/D: %r" '"You are User %u, Slot %s, User-ID: %i, Group: %g"
-
     Public Property OnSyntaxError As String = "Syntax: !timer <minutes> (0 for disable)"
     Public Property OnValueError As String = "Max Timer: 60 Minutes"
     Public Property OnSuccess As String = "Timer set to %s minutes"

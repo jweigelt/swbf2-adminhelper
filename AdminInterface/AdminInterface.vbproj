@@ -147,6 +147,7 @@
     <Compile Include="class\handler\backend\CommandHandler.vb" />
     <Compile Include="class\handler\backend\commands\admin\CmdBan.vb" />
     <Compile Include="class\handler\backend\commands\game\CmdRestart.vb" />
+    <Compile Include="class\handler\backend\commands\game\CmdScore.vb" />
     <Compile Include="class\handler\backend\commands\game\CmdTimer.vb" />
     <Compile Include="class\handler\backend\commands\game\CmdBots.vb" />
     <Compile Include="class\handler\backend\commands\game\CmdEndgame.vb" />
