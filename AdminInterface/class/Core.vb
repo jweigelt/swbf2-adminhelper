@@ -149,6 +149,7 @@ Public Class Core
             .RegisterCommand(GetType(CmdPutGroup), "putgroup")
             .RegisterCommand(GetType(CmdFirst), "first")
             .RegisterCommand(GetType(CmdSetNextMap), "setnextmap")
+            .RegisterCommand(GetType(CmdStats), "stats")
             If Me.DCConfig.EnableDyncommandHandler Then
                 For Each c As DynCommand In Me.DCConfig.Commands
                     Logger.Log(LogTemplate.CMD_DYN_REG, LogLevel.info, c.CommandAlias)
