@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CmdCommands xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Permission>commands</Permission>
+  <IsPublic>true</IsPublic>
+  <CommandAlias>commands</CommandAlias>
+  <BySuperAdmin>false</BySuperAdmin>
+  <OnSyntaxError>Syntax: #commands</OnSyntaxError>
+  <UnlistedCommands>
+    <string>shutdown</string>
+    <string>adminpls</string>
+    <string>test</string>
+    <string>hi</string>
+    <string>assault</string>
+  </UnlistedCommands>
+</CmdCommands>

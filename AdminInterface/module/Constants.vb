@@ -16,9 +16,9 @@
 'Constants
 Public Class Constants
     Public Const PRODUCT_NAME As String = "SWBF2-SADS Admin Helper"
-    Public Const PRODUCT_VERSION As String = "3.0"
+    Public Const PRODUCT_VERSION As String = "3.3"
     Public Const PRODUCT_VENDOR As String = "JW 'LeKeks' 2015"
-    Public Const PRODUCT_BANNER As String = "SWBF2 Admin Helper v3.0 / LeKeks 2015"
+    Public Const PRODUCT_BANNER As String = "SWBF2 Admin Helper v3.3 / LeKeks (Customized by Yoni) 2015"
 
     Public Const CFG_DIR As String = "/cfg"
     Public Const CFG_CMD_DIR As String = "/cmd"

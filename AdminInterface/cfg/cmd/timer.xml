@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CmdTimer xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Permission>timer</Permission>
+  <IsPublic>false</IsPublic>
+  <CommandAlias>timer</CommandAlias>
+  <BySuperAdmin>false</BySuperAdmin>
+  <OnSyntaxError>Syntax: !timer &lt;minutes&gt; (0 for disable)</OnSyntaxError>
+  <OnValueError>Max Timer: 60 Minutes</OnValueError>
+  <OnSuccess>Timer set to %s minutes</OnSuccess>
+</CmdTimer>

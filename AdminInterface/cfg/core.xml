@@ -22,7 +22,8 @@
   <ExitOnError>false</ExitOnError>	<!--if this is set to true, the program will exit if a critical error occurs-->
   
   <!--Remote console server setup-->
-  <RconHostname>10.0.0.20</RconHostname>		<!--server's ip-address or hostname-->
+  <!--<RconHostname>10.0.0.20</RconHostname>		server's ip-address or hostname-->
+  <RconHostname>10.236.4.13</RconHostname>
   <RconPort>4658</RconPort>						<!--server's >>Remote Console<< port (TCP, default: 4658)-->
   <RconPassword>123</RconPassword>				<!--server's admin password-->
   

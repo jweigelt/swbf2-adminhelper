@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CmdStats xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Permission>stats</Permission>
+  <IsPublic>true</IsPublic>
+  <CommandAlias>stats</CommandAlias>
+  <BySuperAdmin>false</BySuperAdmin>
+  <StatsStr>Points: %p, Kills: %k, Deaths: %d, K/D: %r</StatsStr>
+  <OnSyntaxError>Syntax: !stats [&lt;user&gt;]</OnSyntaxError>
+  <OnNoPlayerMatch>No player matching %e could be found!</OnNoPlayerMatch>
+</CmdStats>

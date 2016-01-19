@@ -152,6 +152,7 @@
     <Compile Include="class\handler\backend\commands\game\CmdBots.vb" />
     <Compile Include="class\handler\backend\commands\game\CmdEndgame.vb" />
     <Compile Include="class\handler\backend\commands\management\CmdFirst.vb" />
+    <Compile Include="class\handler\backend\commands\public\CmdCommands.vb" />
     <Compile Include="class\handler\backend\commands\public\CmdStats.vb" />
     <Compile Include="class\handler\backend\commands\public\CmdInfo.vb" />
     <Compile Include="class\handler\backend\commands\admin\CmdIpBan.vb" />

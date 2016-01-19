@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CmdScore xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Permission>score</Permission>
+  <IsPublic>false</IsPublic>
+  <CommandAlias>score</CommandAlias>
+  <BySuperAdmin>false</BySuperAdmin>
+  <StatsStr>Points: %p, Kills: %k, Deaths: %d, K/D: %r</StatsStr>
+  <OnSyntaxError>Syntax: !score &lt;points&gt;</OnSyntaxError>
+  <OnMaxScoreError>Max Score Limit: %p Points</OnMaxScoreError>
+  <OnMinScoreError>Min Score Limit: 1 Point</OnMinScoreError>
+  <OnSuccess>Score limit set to %p points</OnSuccess>
+</CmdScore>
