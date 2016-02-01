@@ -19,6 +19,7 @@ Public Class CmdTest
     Public Property OnTestPlayer As String = "You are Player %u, Slot %s. You are not registered."
     Public Property OnSyntaxError As String = "Syntax: #test [<user>]"
     Public Property OnInvalidPermissions As String = "You cannot test other players!"
+    Public Property OnPlayerNotFound As String = "Player %p does not match a specific user!"
 
     Sub New()
         Me.CommandAlias = "test"
@@ -44,7 +45,12 @@ Public Class CmdTest
             affectedUser = player
         Else
             affectedUser = Me.adminIface.PHandler.FetchUserByNameMatch(params(1))
+            If affectedUser Is Nothing Then
+                Me.Pm(Me.ParseTemplate(Me.OnPlayerNotFound, {params(1)}, {"p"}), player)
+                Return False
+            End If
         End If
+
         Me.adminIface.SQL.GetUserDetails(affectedUser)
         If affectedUser.IsRegistered Then
             Me.Pm(Me.ParseTemplate(Me.OnTestRegistered,

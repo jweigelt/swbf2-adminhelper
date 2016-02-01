@@ -172,12 +172,18 @@ Public Class PlayerHandler
     End Function
 
     Public Function FetchUserByNameMatch(ByVal needle As String) As User
+        Dim result As User
+        Dim results As Integer = 0
         For Each p As User In Me.PlayerList
             If p.UserName.ToLower.Contains(needle.ToLower) Then
                 Me.AdminIface.SQL.GetUserDetails(p)
-                Return p
+                result = p
+                results += 1
             End If
         Next
+        If results = 1 Then
+            Return result
+        End If
         Return Nothing
     End Function
 
