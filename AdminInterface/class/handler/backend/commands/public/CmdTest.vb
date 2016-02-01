@@ -17,6 +17,8 @@ Public Class CmdTest
 
     Public Property OnTestRegistered As String = "You are User %u, Slot %s, User-ID: %i, Group: %g"
     Public Property OnTestPlayer As String = "You are Player %u, Slot %s. You are not registered."
+    Public Property OnSyntaxError As String = "Syntax: #test [<user>]"
+    Public Property OnInvalidPermissions As String = "You cannot test other players!"
 
     Sub New()
         Me.CommandAlias = "test"
@@ -25,15 +27,33 @@ Public Class CmdTest
     End Sub
 
     Public Overrides Function Execute(ByVal commandStr As String, ByVal player As User) As Boolean
-        Me.adminIface.SQL.GetUserDetails(player)
-        If player.IsRegistered Then
-            Me.Say(Me.ParseTemplate(Me.OnTestRegistered,
-           {player.UserName, player.SlotId.ToString(), player.UserId.ToString(), player.GroupName},
-           {"u", "s", "i", "g"}))
+        Dim params() As String = Split(commandStr, " ")
+
+        If params.Length > 1 And Not Me.adminIface.PHandler.HasPermission(player, Me) Then
+            Me.Pm(Me.OnInvalidPermissions, player)
+            Return False
+        End If
+
+        If params.Length > 2 Then
+            Me.Pm(Me.OnSyntaxError, player)
+            Return False
+        End If
+
+        Dim affectedUser As User
+        If params.Length < 2 Then
+            affectedUser = player
         Else
-            Me.Say(Me.ParseTemplate(Me.OnTestPlayer,
-           {player.UserName, player.SlotId.ToString()},
-           {"u", "s"}))
+            affectedUser = Me.adminIface.PHandler.FetchUserByNameMatch(params(1))
+        End If
+        Me.adminIface.SQL.GetUserDetails(affectedUser)
+        If affectedUser.IsRegistered Then
+            Me.Pm(Me.ParseTemplate(Me.OnTestRegistered,
+           {affectedUser.UserName, affectedUser.SlotId.ToString(), affectedUser.UserId.ToString(), affectedUser.GroupName},
+           {"u", "s", "i", "g"}), player)
+        Else
+            Me.Pm(Me.ParseTemplate(Me.OnTestPlayer,
+           {affectedUser.UserName, affectedUser.SlotId.ToString()},
+           {"u", "s"}), player)
         End If
 
         Return True

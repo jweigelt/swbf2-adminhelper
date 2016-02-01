@@ -49,4 +49,8 @@ Public Class User
         su.Points = 0
         Return su
     End Function
+
+    Public Function IsAdmin() As Boolean
+        Return (GroupId = 1)
+    End Function
 End Class
