@@ -50,11 +50,14 @@ Public Class CmdPutGroup
             Return False
         End If
 
+        affectedUser.GroupId = groupId
+
         If Not affectedUser.IsRegistered Then
             Me.adminIface.SQL.RegisterUser(affectedUser)
+        Else
+            Me.adminIface.SQL.PutGroup(affectedUser.UserId, groupId)
         End If
 
-        Me.adminIface.SQL.PutGroup(affectedUser.UserId, groupId)
         Me.Say(Me.ParseTemplate(Me.OnPut, {affectedUser.UserName, Replace(params(2), "/", String.Empty)}, {"u", "g"}))
         Return True
     End Function
