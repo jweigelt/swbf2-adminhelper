@@ -51,7 +51,7 @@ Public Class CmdPutGroup
         End If
 
         If Not affectedUser.IsRegistered Then
-            Me.adminIface.SQL.RegisterUser(player)
+            Me.adminIface.SQL.RegisterUser(affectedUser)
         End If
 
         Me.adminIface.SQL.PutGroup(affectedUser.UserId, groupId)

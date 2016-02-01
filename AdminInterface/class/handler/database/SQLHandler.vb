@@ -298,7 +298,7 @@ Public Class SQLHandler
     End Function
 
     Public Sub PutGroup(ByVal userid As Int32, ByVal groupId As Int32)
-        Dim sql As String = "update `" & Constants.SQL_USERS_TABLE & "` set `group` = " & groupId.ToString() & " where `id` = " & userid.ToString()
+        Dim sql As String = "update `" & Constants.SQL_USERS_TABLE & "` set `group` = '" & groupId.ToString() & "' where `id` = '" & userid.ToString() & "'"
         Me.NonQuery(sql)
     End Sub
 
