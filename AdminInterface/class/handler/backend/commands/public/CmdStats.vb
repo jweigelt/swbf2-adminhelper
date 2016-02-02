@@ -1,11 +1,10 @@
 ﻿Public Class CmdStats
     Inherits Command
 
-    Public Property StatsStr As String = "Points: %p, Kills: %k, Deaths: %d, K/D: %r" '"You are User %u, Slot %s, User-ID: %i, Group: %g"
-
-    Public Property OnSyntaxError As String = "Syntax: !stats [<user>]"
+    Public Property StatsStr As String = "Points: %p, Kills: %k, Deaths: %d, K/D: %r"
+    Public Property StatsStrPoints As String = "Points: %p, Kills (approx): %k, Deaths: %d, K/D (approx): %r"
+    Public Property OnSyntaxError As String = "Syntax: #stats [-p] [<user>]"
     Public Property OnNoPlayerMatch As String = "No player matching %e could be found!"
-
 
     Sub New()
         Me.CommandAlias = "stats"
@@ -15,17 +14,25 @@
 
     Public Overrides Function Execute(ByVal commandStr As String, ByVal player As User) As Boolean
         Dim params() As String = Split(commandStr, " ")
+        '#stats -p yoni
 
-        If params.Length > 2 Then
-            Me.Say(Me.OnSyntaxError)
+        If params.Length > 3 Then
+            Me.Pm(Me.OnSyntaxError, player)
             Return False
         End If
 
         Dim affectedUser As User
-        If params.Length < 2 Then
-            affectedUser = player
-        Else
+        Dim usePoints As Boolean = Array.Exists(params, "-p")
+
+        If usePoints And params.Length > 2 And params(2) != "-p" Then
+            affectedUser = Me.adminIface.PHandler.FetchUserByNameMatch(params(2))
+        Else If Not usePoints And params.Length > 1 Then
             affectedUser = Me.adminIface.PHandler.FetchUserByNameMatch(params(1))
+        Else If usePoints And params(2) = "-p" Then
+            Me.Pm(Me.OnSyntaxError, player)
+            Return False
+        Else
+            affectedUser = player
         End If
 
         If affectedUser Is Nothing Then
@@ -34,19 +41,33 @@
         End If
 
         Me.adminIface.SQL.GetUserDetails(affectedUser)
+
         Dim kdr As Double
         If affectedUser.Deaths = 0 Then
             kdr = 0.0
         Else
-            kdr = Math.Round(affectedUser.Kills / affectedUser.Deaths, 2)
+            If usePoints Then
+                kdr = Math.Round(affectedUser.Points / 2 / affectedUser.Deaths, 2)
+            Else
+                kdr = Math.Round(affectedUser.Kills / affectedUser.Deaths, 2)
+            End If
         End If
 
-        Me.Pm(
-            Me.ParseTemplate(Me.StatsStr,
-                {affectedUser.Points, affectedUser.Kills, affectedUser.Deaths, kdr},
-                {"p", "k", "d", "r"}
-            ), player
-        )
+        If usePoints Then
+            Me.Pm(
+                Me.ParseTemplate(Me.StatsStrPoints,
+                    {affectedUser.Points, Math.Round(affectedUser.Points / 2, 2), affectedUser.Deaths, kdr},
+                    {"p", "k", "d", "r"}
+                ), player
+            )
+        Else
+            Me.Pm(
+                Me.ParseTemplate(Me.StatsStr,
+                    {affectedUser.Points, affectedUser.Kills, affectedUser.Deaths, kdr},
+                    {"p", "k", "d", "r"}
+                ), player
+            )
+        End If
 
         Return True
     End Function
