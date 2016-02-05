@@ -31,6 +31,9 @@ Public Class PlayerlistPacket
         Dim rows() As String = Split(data, vbCrLf)
         For Each r As String In rows
             'If r.Length <> 90 Then Continue For
+            If r.Trim = "done" Then
+                Continue For
+            End If
             Dim u As New User
             With u
                 .SlotId = Int32.Parse(RTrim(Mid(r, 1, 2)))
