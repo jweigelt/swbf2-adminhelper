@@ -14,7 +14,6 @@
 
     Public Overrides Function Execute(ByVal commandStr As String, ByVal player As User) As Boolean
         Dim params() As String = Split(commandStr, " ")
-        '#stats -p yoni
 
         If params.Length > 3 Then
             Me.Pm(Me.OnSyntaxError, player)
@@ -22,15 +21,19 @@
         End If
 
         Dim affectedUser As User
-        Dim usePoints As Boolean = Array.Exists(params, "-p")
 
-        If usePoints And params.Length > 2 And params(2) != "-p" Then
+        Dim paramsList = params.ToList
+        Dim usePoints As Boolean = paramsList.Contains("-p")
+
+        If usePoints AndAlso params.Length > 2 AndAlso params(2) <> "-p" Then
             affectedUser = Me.adminIface.PHandler.FetchUserByNameMatch(params(2))
-        Else If Not usePoints And params.Length > 1 Then
-            affectedUser = Me.adminIface.PHandler.FetchUserByNameMatch(params(1))
-        Else If usePoints And params(2) = "-p" Then
+        ElseIf usePoints AndAlso params.Length > 2 AndAlso params(2) = "-p" Then
             Me.Pm(Me.OnSyntaxError, player)
             Return False
+        ElseIf usePoints Then
+            affectedUser = player
+        ElseIf Not usePoints AndAlso params.Length > 1 Then
+            affectedUser = Me.adminIface.PHandler.FetchUserByNameMatch(params(1))
         Else
             affectedUser = player
         End If
