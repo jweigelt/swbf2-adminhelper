@@ -21,6 +21,7 @@ Imports MySql.Data
 Imports MySql.Data.MySqlClient
 Imports System.Data.Common
 Imports System.Data.SQLite
+Imports System.Data.SqlClient
 
 Public Class SQLHandler
     Public Property Hostname As String
@@ -61,6 +62,7 @@ Public Class SQLHandler
         Catch ex As Exception
             Logger.Log(LogTemplate.SQL_CONNECT_FAIL, LogLevel.critical)
         End Try
+
         Return False
     End Function
 
@@ -70,7 +72,7 @@ Public Class SQLHandler
 
     Public Function DoQuery(ByVal sql As String) As DbDataReader
         Dim reader As DbDataReader = Nothing
-        Dim query As DbCommand = Nothing
+        Dim query As SqlCommand = New SqlCommand(sql)
 
         Try
             Logger.Log("Query: " & sql, LogLevel.debug)
@@ -84,11 +86,50 @@ Public Class SQLHandler
                 End While
             End If
 
-            If DbType = DbTypes.MySQL Then
-                query = New MySqlCommand(sql)
-            Else
-                query = New SQLiteCommand(sql)
+            query.Connection = Me.connection
+            query.Prepare()
+
+            reader = query.ExecuteReader()
+
+            Return reader
+        Catch ex As Exception
+            If Not reader Is Nothing Then
+                If reader.IsClosed = False Then reader.Close()
             End If
+            Logger.Log("Failed to execute Query " & sql & vbCrLf & ex.ToString, LogLevel.failure)
+        End Try
+        Return Nothing
+    End Function
+
+    Public Function AddCmdParams(ByRef query As SqlCommand, ByVal names As Array, ByVal values As Array) As SqlCommand
+        With query.Parameters
+            For i As Integer = 0 To names.Length - 1
+                .AddWithValue(names(i), values(i))
+            Next
+        End With
+        Return query
+    End Function
+
+    Public Function DoQueryParams(ByVal sql As String, ByVal names As Array, ByVal values As Array) As DbDataReader
+        Dim reader As DbDataReader = Nothing
+        Dim query As SqlCommand = New SqlCommand(sql)
+
+        Try
+            Logger.Log("Query: " & sql, LogLevel.debug)
+            If Not Me.connection.State = ConnectionState.Open Then
+                Me.connection.Open()
+            End If
+
+            If Not reader Is Nothing Then
+                While Not reader.IsClosed = True
+                    Threading.Thread.Sleep(10)
+                End While
+            End If
+
+            If names.Length <> 0 Then
+                query = AddCmdParams(query, names, values)
+            End If
+
             query.Connection = Me.connection
             query.Prepare()
 
@@ -130,7 +171,7 @@ Public Class SQLHandler
         End SyncLock
     End Function
 
-    Public Function EscapeString(ByVal sql As String) 'Die bösen Sachen filtern 
+    Public Function EscapeString(ByVal sql As String) 'Die bösen Sachen filtern
         Return MySqlHelper.EscapeString(sql)
     End Function
     Public Sub Terminate()
@@ -169,10 +210,16 @@ Public Class SQLHandler
     End Function
 
     Public Function PlayerExists(ByVal player As User) As Boolean
-        Dim sql As String =
+        Dim sql2 As String =
             "select `id` from `" & Constants.SQL_PLAYERS_TABLE & "` " &
             "where `keyhash` = '" & player.KeyHash & "' and `username` = '" & EscapeString(player.UserName) & "'"
-        Return Me.CheckForRows(Me.DoQuery(sql))
+        Dim sql As String = "
+            SELECT id FROM `" & Constants.SQL_PLAYERS_TABLE & "`
+            WHERE keyhash = @hash AND username = @name
+        "
+        Dim values = {player.KeyHash, player.UserName}
+        Dim names = {"@hash", "@name"}
+        Return Me.CheckForRows(Me.DoQueryParams(sql, names, values))
     End Function
 
     Public Sub RegisterPlayer(ByVal player As User)
