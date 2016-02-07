@@ -46,6 +46,9 @@ Public Class CmdPutGroup
 
         Dim affectedUser As User = Me.adminIface.PHandler.FetchUserByNameMatch(params(1))
         If affectedUser Is Nothing Then
+            affectedUser = Me.adminIface.SQL.FindRegisteredUser(params(1))
+        End If
+        If affectedUser Is Nothing Then
             Me.Say(Me.ParseTemplate(Me.OnNoPlayerMatch, {params(1)}, {"e"}))
             Return False
         End If

@@ -46,6 +46,9 @@ Public Class CmdTest
         Else
             affectedUser = Me.adminIface.PHandler.FetchUserByNameMatch(params(1))
             If affectedUser Is Nothing Then
+                affectedUser = Me.adminIface.SQL.FindRegisteredUser(params(1))
+            End If
+            If affectedUser Is Nothing Then
                 Me.Pm(Me.ParseTemplate(Me.OnPlayerNotFound, {params(1)}, {"p"}), player)
                 Return False
             End If

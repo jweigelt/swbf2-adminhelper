@@ -172,7 +172,7 @@ Public Class PlayerHandler
     End Function
 
     Public Function FetchUserByNameMatch(ByVal needle As String) As User
-        Dim result As User
+        Dim result As User = Nothing
         Dim results As Integer = 0
         For Each p As User In Me.PlayerList
             If p.UserName.ToLower.Contains(needle.ToLower) Then

@@ -212,6 +212,26 @@ Public Class SQLHandler
         Me.NonQuery(sql, names, values)
     End Sub
 
+    Public Function FindRegisteredUser(ByVal partialName As String) As User
+        Dim sql As String = "
+            SELECT keyhash FROM `" & Constants.SQL_USERS_TABLE & "`
+            WHERE username LIKE @partialName
+            LIMIT 1
+        "
+        Using res = Me.DoQuery(sql, {"@partialName"}, {"%" & partialName & "%"})
+            If res.HasRows Then
+                res.Read()
+                Dim user As User = New User
+                user.IsRegistered = True
+                user.KeyHash = res("keyhash")
+                GetUserDetails(user)
+                Return user
+            Else
+                Return Nothing
+            End If
+        End Using
+    End Function
+
     Public Sub GetUserDetails(ByRef player As User)
         Dim sql As String = "
             SELECT * FROM `" & Constants.SQL_USERS_TABLE & "`
@@ -227,6 +247,7 @@ Public Class SQLHandler
                 player.IsRegistered = True
                 player.UserId = res("id")
                 player.GroupId = res("group")
+                player.UserName = res("username")
                 If Not IsDBNull("groupname") Then player.GroupName = res("groupname")
             End If
             res.Close()
