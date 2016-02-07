@@ -70,9 +70,15 @@ Public Class SQLHandler
         Return [Enum].GetName(GetType(DbTypes), DbType)
     End Function
 
-    Public Function DoQuery(ByVal sql As String) As DbDataReader
+    Public Function DoQuery(ByVal sql As String, Optional ByVal names As Array = Nothing, Optional ByVal values As Array = Nothing) As DbDataReader
         Dim reader As DbDataReader = Nothing
-        Dim query As SqlCommand = New SqlCommand(sql)
+
+        Dim query
+        If DbType = DbTypes.SQLite Then
+            query = New SQLiteCommand(sql)
+        Else
+            query = New MySqlConnection(sql)
+        End If
 
         Try
             Logger.Log("Query: " & sql, LogLevel.debug)
@@ -86,47 +92,7 @@ Public Class SQLHandler
                 End While
             End If
 
-            query.Connection = Me.connection
-            query.Prepare()
-
-            reader = query.ExecuteReader()
-
-            Return reader
-        Catch ex As Exception
-            If Not reader Is Nothing Then
-                If reader.IsClosed = False Then reader.Close()
-            End If
-            Logger.Log("Failed to execute Query " & sql & vbCrLf & ex.ToString, LogLevel.failure)
-        End Try
-        Return Nothing
-    End Function
-
-    Public Function AddCmdParams(ByRef query As SqlCommand, ByVal names As Array, ByVal values As Array) As SqlCommand
-        With query.Parameters
-            For i As Integer = 0 To names.Length - 1
-                .AddWithValue(names(i), values(i))
-            Next
-        End With
-        Return query
-    End Function
-
-    Public Function DoQueryParams(ByVal sql As String, ByVal names As Array, ByVal values As Array) As DbDataReader
-        Dim reader As DbDataReader = Nothing
-        Dim query As SqlCommand = New SqlCommand(sql)
-
-        Try
-            Logger.Log("Query: " & sql, LogLevel.debug)
-            If Not Me.connection.State = ConnectionState.Open Then
-                Me.connection.Open()
-            End If
-
-            If Not reader Is Nothing Then
-                While Not reader.IsClosed = True
-                    Threading.Thread.Sleep(10)
-                End While
-            End If
-
-            If names.Length <> 0 Then
+            If Not names Is Nothing AndAlso names.Length <> 0 Then
                 query = AddCmdParams(query, names, values)
             End If
 
@@ -145,9 +111,17 @@ Public Class SQLHandler
         Return Nothing
     End Function
 
-    Public Function NonQuery(ByVal sql As String) As Int32
+    Public Function AddCmdParams(ByRef query As Object, ByVal names As Array, ByVal values As Array) As Object
+        With query.Parameters
+            For i As Integer = 0 To names.Length - 1
+                .AddWithValue(names(i), values(i))
+            Next
+        End With
+        Return query
+    End Function
+
+    Public Function NonQuery(ByVal sql As String, Optional ByVal names As Array = Nothing, Optional ByVal values As Array = Nothing) As Int32
         SyncLock Me.connection
-            Dim query As DbCommand
             Try
                 Logger.Log("Query: " & sql, LogLevel.debug)
 
@@ -155,10 +129,15 @@ Public Class SQLHandler
                     Me.connection.Open()
                 End If
 
-                If DbType = DbTypes.MySQL Then
-                    query = New MySqlCommand(sql)
-                Else
+                Dim query
+                If DbType = DbTypes.SQLite Then
                     query = New SQLiteCommand(sql)
+                Else
+                    query = New MySqlConnection(sql)
+                End If
+
+                If Not names Is Nothing AndAlso names.Length <> 0 Then
+                    query = AddCmdParams(query, names, values)
                 End If
 
                 query.Connection = Me.connection
@@ -217,27 +196,32 @@ Public Class SQLHandler
             SELECT id FROM `" & Constants.SQL_PLAYERS_TABLE & "`
             WHERE keyhash = @hash AND username = @name
         "
-        Dim values = {player.KeyHash, player.UserName}
-        Dim names = {"@hash", "@name"}
-        Return Me.CheckForRows(Me.DoQueryParams(sql, names, values))
+        Dim values As Array = {player.KeyHash, player.UserName}
+        Dim names As Array = {"@hash", "@name"}
+        Return Me.CheckForRows(Me.DoQuery(sql, names, values))
     End Function
 
     Public Sub RegisterPlayer(ByVal player As User)
         Dim sql As String = "
             INSERT INTO " & Constants.SQL_PLAYERS_TABLE & "
             (username, keyhash, lastip, lastseen) VALUES
-            ('" & EscapeString(player.UserName) & "','" & EscapeString(player.KeyHash) & "','" &
-            EscapeString(player.IPAddress.ToString) & "'," & GetSQLNow() & ")
+            (@username, @keyhash, @lastip, @lastseen)
         "
-        Me.NonQuery(sql)
+        Dim names As Array = {"@username", "@keyhash", "@lastip", "@lastseen"}
+        Dim values As Array = {player.UserName, player.KeyHash, player.IPAddress.ToString, GetSQLNow()}
+        Me.NonQuery(sql, names, values)
     End Sub
 
     Public Sub GetUserDetails(ByRef player As User)
-        Dim sql As String = "select * from `" & Constants.SQL_USERS_TABLE & "` " &
-                            "left join `" & Constants.SQL_GROUPS_TABLE & "` on " & "`" & Constants.SQL_GROUPS_TABLE & "`.`id` = " &
-                            "`group` where `keyhash` = '" & player.KeyHash & "'"
-
-        Using res = Me.DoQuery(sql)
+        Dim sql As String = "
+            SELECT * FROM `" & Constants.SQL_USERS_TABLE & "`
+            LEFT JOIN `" & Constants.SQL_GROUPS_TABLE & "`
+            ON " & "`" & Constants.SQL_GROUPS_TABLE & "`.`id` = `group`
+            WHERE `keyhash` = @keyhash
+        "
+        Dim names As Array = {"@keyhash"}
+        Dim values As Array = {player.KeyHash}
+        Using res = Me.DoQuery(sql, names, values)
             If res.HasRows Then
                 res.Read()
                 player.IsRegistered = True
@@ -250,9 +234,11 @@ Public Class SQLHandler
     End Sub
 
     Public Sub GetPlayerDetails(ByRef player As User)
-        Dim sql As String = "select * from `" & Constants.SQL_PLAYERS_TABLE & "` where `keyhash` = '" & player.KeyHash & "'"
-
-        Using res = Me.DoQuery(sql)
+        Dim sql As String = "
+            SELECT * FROM `" & Constants.SQL_PLAYERS_TABLE & "`
+            WHERE `keyhash` = @keyhash
+        "
+        Using res = Me.DoQuery(sql, {"@keyhash"}, {player.KeyHash})
             If res.HasRows Then
                 res.Read()
                 player.playerId = res("id")
@@ -263,28 +249,30 @@ Public Class SQLHandler
 
     Public Function HasPermission(ByVal player As User, ByVal cmd As Command) As Boolean
         Dim sql As String =
-          "select `" & Constants.SQL_PERMISSIONS_TABLE & "`.`id` from `" &
+          "SELECT `" & Constants.SQL_PERMISSIONS_TABLE & "`.`id` FROM `" &
                                  Constants.SQL_GROUPS_TABLE & "`, `" &
                                  Constants.SQL_PERMISSIONS_TABLE & "`, `" &
                                  Constants.SQL_USERS_TABLE & "` " &
-          "where ((`" & Constants.SQL_GROUPS_TABLE & "`.`id` = `" & Constants.SQL_PERMISSIONS_TABLE & "`.`groupid` and `" &
+          "WHERE ((`" & Constants.SQL_GROUPS_TABLE & "`.`id` = `" & Constants.SQL_PERMISSIONS_TABLE & "`.`groupid` AND `" &
                        Constants.SQL_USERS_TABLE & "`.`group` = `" & Constants.SQL_GROUPS_TABLE & "`.`id`) or `" &
                        Constants.SQL_USERS_TABLE & "`.`id` = `" & Constants.SQL_PERMISSIONS_TABLE & "`.`userid`) " &
-          "and `" & Constants.SQL_USERS_TABLE & "`.`keyhash` = '" & EscapeString(player.KeyHash) & "' " &
-          "and `" & Constants.SQL_PERMISSIONS_TABLE & "`.`alias` = '" & cmd.Permission & "'"
-        Using res = Me.DoQuery(sql)
+          "AND `" & Constants.SQL_USERS_TABLE & "`.`keyhash` = @keyhash " &
+          "AND `" & Constants.SQL_PERMISSIONS_TABLE & "`.`alias` = '" & cmd.Permission & "'"
+
+        Using res = Me.DoQuery(sql, {"@keyhash"}, {player.KeyHash})
             Return Me.CheckForRows(res)
         End Using
     End Function
 
     Public Function QueryNameList(ByVal u As User, ByVal order As String, ByVal maxCount As Int32, ByVal ipSeek As Boolean, Optional ByVal ipExpression As String = "") As List(Of String)
-        Dim sql As String = "select `username` from `" & Constants.SQL_PLAYERS_TABLE & "` where "
+        'TODO
+        Dim sql As String = "SELECT `username` FROM `" & Constants.SQL_PLAYERS_TABLE & "` WHERE "
         If ipSeek Then
             sql &= "`lastip` " & ipExpression
         Else
             sql &= "`keyhash` = '" & Me.EscapeString(u.KeyHash) & "' "
         End If
-        sql &= "order by `id` " & order & " limit " & maxCount.ToString()
+        sql &= "ORDER BY `id` " & order & " LIMIT " & maxCount.ToString()
 
         Dim users As New List(Of String)
         Using res = Me.DoQuery(sql)
@@ -302,19 +290,23 @@ Public Class SQLHandler
         Dim sql As String = "
             INSERT INTO " & Constants.SQL_BANS_TABLE & "
             (player, admin, duration, `type`, `time`) VALUES
-            ('" & affectedUser.playerId & "','" & admin.UserId & "','" & duration.ToString & "','" & IIf(ipBan, "1", "0").ToString & "'," & GetSQLNow() & ")
+            (@playerId, @adminId, @duration, @type, @timestamp)
         "
-        Me.NonQuery(sql)
+        Dim names As Array = {"@playerId", "@adminId", "@duration", "@type", "@timestamp"}
+        Dim values As Array = {affectedUser.playerId, admin.UserId, duration.ToString, IIf(ipBan, "1", "0").ToString, GetSQLNow()}
+        Me.NonQuery(sql, names, values)
     End Sub
 
     Public Function IsBanned(ByVal player As User) As Boolean
-        Dim sql As String = "select ai_bans.id from " & Constants.SQL_BANS_TABLE &
-        " left join " & Constants.SQL_PLAYERS_TABLE & " on " & Constants.SQL_BANS_TABLE & ".player =" & Constants.SQL_PLAYERS_TABLE & ".id" &
-        " where ((`keyhash` = '" & Me.EscapeString(player.KeyHash) & "' and `type` = 0) " &
-        " or (`lastip` = '" & player.IPAddress.ToString() & "' and `type` = 1)) " &
-        " and (`time` + `duration` > " & GetSQLNow() & " or `duration` < 0)"
+        Dim sql As String = "SELECT ai_bans.id FROM " & Constants.SQL_BANS_TABLE &
+        " LEFT JOIN " & Constants.SQL_PLAYERS_TABLE & " on " & Constants.SQL_BANS_TABLE & ".player =" & Constants.SQL_PLAYERS_TABLE & ".id" &
+        " WHERE ((`keyhash` = @keyhash AND `type` = 0) " &
+        " OR (`lastip` = @lastip AND `type` = 1)) " &
+        " AND (`time` + `duration` > @timestamp OR `duration` < 0)"
 
-        Using r = Me.DoQuery(sql)
+        Dim names As Array = {"@keyhash", "@lastip", "@timestamp"}
+        Dim values As Array = {player.KeyHash, player.IPAddress.ToString(), GetSQLNow()}
+        Using r = Me.DoQuery(sql, names, values)
             If r.HasRows Then
                 r.Close()
                 Return True
@@ -327,14 +319,15 @@ Public Class SQLHandler
 
     Public Sub RunCleanup()
         Logger.Log(LogTemplate.SQL_CLEANUP, LogLevel.info)
-        Dim sql As String = "delete from `" & Constants.SQL_BANS_TABLE & "` where `time` + `duration` < " & GetSQLNow() & " and `duration` > 0"
-        Me.NonQuery(sql)
+        Dim sql As String = "DELETE FROM `" & Constants.SQL_BANS_TABLE & "` WHERE `time` + `duration` < @timestamp AND `duration` > 0"
+        Dim names As Array = {"@timestamp"}
+        Dim values As Array = {GetSQLNow()}
+        Me.NonQuery(sql, names, values)
     End Sub
 
     Public Function GetGroupId(ByVal name As String) As Int32
-        name = EscapeString(name)
-        Dim sql As String = "select `id` from `" & Constants.SQL_GROUPS_TABLE & "` where `groupname` = '" & name & "'"
-        Using res = Me.DoQuery(sql)
+        Dim sql As String = "SELECT `id` FROM `" & Constants.SQL_GROUPS_TABLE & "` WHERE `groupname` = @name"
+        Using res = Me.DoQuery(sql, {"@name"}, {name})
             If res.HasRows Then
                 res.Read()
                 Return res("id")
@@ -345,12 +338,14 @@ Public Class SQLHandler
     End Function
 
     Public Sub PutGroup(ByVal userid As Int32, ByVal groupId As Int32)
-        Dim sql As String = "update `" & Constants.SQL_USERS_TABLE & "` set `group` = '" & groupId.ToString() & "' where `id` = '" & userid.ToString() & "'"
-        Me.NonQuery(sql)
+        Dim sql As String = "UPDATE `" & Constants.SQL_USERS_TABLE & "` SET `group` = @groupId WHERE `id` = @userId"
+        Dim names As Array = {"@groupId", "@userId"}
+        Dim values As Array = {groupId.ToString(), userid.ToString()}
+        Me.NonQuery(sql, names, values)
     End Sub
 
     Public Function FirstUser() As Boolean
-        Dim sql As String = "select `id` from `" & Constants.SQL_USERS_TABLE & "`"
+        Dim sql As String = "SELECT `id` FROM `" & Constants.SQL_USERS_TABLE & "`"
         Using res = Me.DoQuery(sql)
             Return Not Me.CheckForRows(res)
         End Using
@@ -360,9 +355,11 @@ Public Class SQLHandler
         Dim sql As String = "
             INSERT INTO " & Constants.SQL_USERS_TABLE & "
             (username, keyhash, `group`) VALUES
-            ('" & EscapeString(player.UserName) & "','" & EscapeString(player.KeyHash) & "','" & player.GroupId & "')
+            (@username, @keyhash, @groupId)
         "
-        Me.NonQuery(sql)
+        Dim names As Array = {"@username", "@keyhash", "@groupId"}
+        Dim values As Array = {player.UserName, player.KeyHash, player.GroupId.ToString()}
+        Me.NonQuery(sql, names, values)
     End Sub
 
 End Class

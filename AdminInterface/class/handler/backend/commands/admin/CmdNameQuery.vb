@@ -91,7 +91,7 @@ Public Class CmdNameQuery
                         Me.Say(Me.OnSyntaxError)
                         Return False
                     End If
-                    ipExpression = "like '" & Mid(affectedUser.IPAddress.ToString(), 1, ipChars) & "%' "
+                    ipExpression = "LIKE '" & Mid(affectedUser.IPAddress.ToString(), 1, ipChars) & "%' "
                 Case Me.OptionVisibility
                     If params(i + 1) = "pm" Then
                         pm = True
