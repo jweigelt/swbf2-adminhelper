@@ -20,7 +20,11 @@
             Return False
         End If
 
-        Dim val As Int32 = Convert.ToInt32(params(1))
+        Dim val As Int32
+        If Not Integer.TryParse(params(1), val) Then
+            Me.Say(Me.OnSyntaxError)
+            Return False
+        End If
 
         If val > 60 Or val < 0 Then
             Me.Pm(Me.OnValueError, player)
