@@ -14,9 +14,10 @@
     Note: announces which are longer then 100 chars will be splitted into several lines.
   -->
   <AnnounceList>
+  <!--
 	<Announce>You're playing on %s:name, Current map: %s:map, %t:h:%t:m (CET).</Announce>
 	<Announce>Next map: %s:nextmap.</Announce>
-	
+	-->
 	<!--If you're feeling generous you might leave this one-->	
 	<Announce>Running %banner</Announce> 		
   </AnnounceList>
