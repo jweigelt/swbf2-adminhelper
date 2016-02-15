@@ -81,6 +81,20 @@
     <CommandAction>say %p:input</CommandAction>
     <EnableVarParser>true</EnableVarParser>
   </DynCommand>
+  <DynCommand>
+    <Permission>score</Permission>
+    <IsPublic>false</IsPublic>
+    <CommandAlias>ff</CommandAlias>
+    <CommandAction>teamdamage %p:input</CommandAction>
+    <EnableVarParser>true</EnableVarParser>
+  </DynCommand>
+  <DynCommand>
+    <Permission>score</Permission>
+    <IsPublic>false</IsPublic>
+    <CommandAlias>autoassign</CommandAlias>
+    <CommandAction>autoassignteams %p:input</CommandAction>
+    <EnableVarParser>true</EnableVarParser>
+  </DynCommand>
 	
 	<!--User(set groupid to NULL)- & Group-specific(set userid to NULL) permissions can be set in ai_permissions (SQL-Database)-->
 	
