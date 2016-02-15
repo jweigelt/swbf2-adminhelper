@@ -23,10 +23,8 @@
   
   <!--Remote console server setup-->
   <!--<RconHostname>10.236.4.13</RconHostname>		server's ip-address or hostname-->
-  <!--<RconHostname>igf.yonilerner.org</RconHostname>-->
   <RconHostname>192.168.1.5</RconHostname>
   <RconPort>4658</RconPort>						<!--server's >>Remote Console<< port (TCP, default: 4658)-->
-  <!--<RconPassword>IgfDjo#574</RconPassword>				server's admin password-->
   <RconPassword>123</RconPassword>
   
   <!--
