@@ -23,6 +23,7 @@ Public Class PlayerHandler
     Public Property AdminList As List(Of User)
     Public Property PlayerList As List(Of User)
     'Private oldPlayerList As List(Of User)
+    Public Property PlayerPointsTracker As Dictionary(Of String, List(Of Int32))
 
     Public Event PlayerJoined(ByVal sender As Object, ByVal player As User)
     Public Event NewPlayerJoined(ByVal sender As Object, ByVal player As User)
@@ -32,6 +33,7 @@ Public Class PlayerHandler
     Sub New(ByVal AdminIface As Core)
         Me.PlayerList = New List(Of User)
         Me.AdminIface = AdminIface
+        Me.PlayerPointsTracker = New Dictionary(Of String, List(Of Int32))
     End Sub
 
     Public Function Init() As Boolean
@@ -71,6 +73,38 @@ Public Class PlayerHandler
                 End If
             Next
         End If
+
+        For Each player As User In plist
+            ' Tracker is a list (lastPoints, calcKills)
+            Dim tracker As List(Of Int32)
+
+            Dim success As Boolean = PlayerPointsTracker.TryGetValue(player.KeyHash, tracker)
+            If success <> True Then
+                tracker = New List(Of Int32) From {0, 0}
+            End If
+
+            Dim killsToAdd As Int32 = 0
+
+            If tracker(0) = 0 Then
+                tracker(0) = player.Points
+                killsToAdd = Math.Floor(player.Points / 2)
+            End If
+
+            If tracker(0) = player.Points Then
+                ' do nothing
+            ElseIf tracker(0) < player.Points Then
+                killsToAdd = Math.Floor((player.Points - tracker(0)) / 2)
+            ElseIf tracker(0) > player.Points + 1 Then
+                ' do nothing
+            Else
+                killsToAdd = Math.Floor(player.Points / 2)
+            End If
+
+            tracker(1) = tracker(1) + killsToAdd
+            tracker(0) = player.Points
+
+            PlayerPointsTracker(player.KeyHash) = tracker
+        Next
 
         If Not Me.PlayerList Is Nothing Then
             'Check if any events have to be triggered

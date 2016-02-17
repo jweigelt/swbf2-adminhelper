@@ -150,6 +150,7 @@ Public Class Core
             .RegisterCommand(GetType(CmdFirst), "first")
             .RegisterCommand(GetType(CmdSetNextMap), "setnextmap")
             .RegisterCommand(GetType(CmdStats), "stats")
+            .RegisterCommand(GetType(CmdTeamStats), "teamstats")
             .RegisterCommand(GetType(CmdTimer), "timer")
             .RegisterCommand(GetType(CmdRestart), "restart")
             .RegisterCommand(GetType(CmdScore), "score")
@@ -255,6 +256,11 @@ Public Class Core
     Private Sub Server_GameEnded(ByVal sender As Object)
         Dim t As New ShedulerTask(AddressOf Me.QueryServerInfo)
         Me.SyncSheduler.PushTask(t)
+        Me.PHandler.PlayerPointsTracker.Clear()
+
+        'For Each kvp As KeyValuePair(Of String, List(Of Int32)) In Me.PHandler.PlayerPointsTracker
+        'Me.PHandler.PlayerPointsTracker(kvp.Key) = New List(Of Int32) From {0, 0}
+        'Next
     End Sub
 
     Private Sub QueryServerInfo()

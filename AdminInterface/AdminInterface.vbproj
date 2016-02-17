@@ -148,6 +148,7 @@
     <Compile Include="class\handler\backend\commands\admin\CmdBan.vb" />
     <Compile Include="class\handler\backend\commands\game\CmdRestart.vb" />
     <Compile Include="class\handler\backend\commands\game\CmdScore.vb" />
+    <Compile Include="class\handler\backend\commands\public\CmdTeamStats.vb" />
     <Compile Include="class\handler\backend\commands\game\CmdTimer.vb" />
     <Compile Include="class\handler\backend\commands\game\CmdBots.vb" />
     <Compile Include="class\handler\backend\commands\game\CmdEndgame.vb" />
@@ -292,6 +293,7 @@
     </Content>
     <Content Include="cfg\core.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="cfg\dyncommand.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
