@@ -188,10 +188,36 @@ Public Class SQLHandler
         End If
     End Function
 
+    Public Function UnbanPlayerByNameMatch(ByVal partialName As String) As String
+        Dim sql As String = "
+            SELECT `" & Constants.SQL_BANS_TABLE & "`.id, keyhash, username FROM `" & Constants.SQL_PLAYERS_TABLE & "`
+            LEFT JOIN `" & Constants.SQL_BANS_TABLE & "` ON player=`" & Constants.SQL_PLAYERS_TABLE & "`.id
+            WHERE keyhash IN (SELECT keyhash FROM `" & Constants.SQL_PLAYERS_TABLE & "` WHERE username LIKE @partialName)
+            AND `" & Constants.SQL_BANS_TABLE & "`.id NOT NULL;
+        "
+
+        Dim bannedPlayerName As String = Nothing
+        Dim bannedId As Int32 = -1
+        Dim count As Int32 = 0
+        Using res = Me.DoQuery(sql, {"@partialName"}, {"%" & partialName & "%"})
+            If res.HasRows Then
+                While res.Read()
+                    If count >= 1 Then
+                        Return Nothing
+                    End If
+                    count += 1
+                    bannedId = res("id")
+                    bannedPlayerName = res("username")
+                End While
+            End If
+        End Using
+
+        sql = "DELETE FROM `" & Constants.SQL_BANS_TABLE & "` WHERE id = @banid"
+        Me.NonQuery(sql, {"@banid"}, {bannedId})
+        Return bannedPlayerName
+    End Function
+
     Public Function PlayerExists(ByVal player As User) As Boolean
-        Dim sql2 As String =
-            "select `id` from `" & Constants.SQL_PLAYERS_TABLE & "` " &
-            "where `keyhash` = '" & player.KeyHash & "' and `username` = '" & EscapeString(player.UserName) & "'"
         Dim sql As String = "
             SELECT id FROM `" & Constants.SQL_PLAYERS_TABLE & "`
             WHERE keyhash = @hash AND username = @name

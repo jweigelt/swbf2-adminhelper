@@ -137,6 +137,7 @@ Public Class Core
             .RegisterCommand(GetType(CmdInfo), "info")
             .RegisterCommand(GetType(CmdKick), "kick")
             .RegisterCommand(GetType(CmdBan), "ban")
+            .RegisterCommand(GetType(CmdUnban), "unban")
             .RegisterCommand(GetType(CmdIpBan), "ipban")
             .RegisterCommand(GetType(CmdTempIpBan), "tempipban")
             .RegisterCommand(GetType(CmdEndgame), "endgame")
