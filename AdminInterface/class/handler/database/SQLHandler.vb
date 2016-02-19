@@ -212,6 +212,10 @@ Public Class SQLHandler
             End If
         End Using
 
+        If bannedId = -1 OrElse bannedPlayerName Is Nothing OrElse bannedPlayerName.Length = 0 Then
+            Return Nothing
+        End If
+
         sql = "DELETE FROM `" & Constants.SQL_BANS_TABLE & "` WHERE id = @banid"
         Me.NonQuery(sql, {"@banid"}, {bannedId})
         Return bannedPlayerName

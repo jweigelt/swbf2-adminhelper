@@ -1,7 +1,7 @@
 ﻿Public Class CmdUnban
     Inherits Command
 
-    Public Property OnBan As String = "%u was unbanned by %a."
+    Public Property OnUnBan As String = "%u was unbanned by %a."
     Public Property OnSyntaxError As String = "Syntax: #unban <user>"
     Public Property OnNoPlayerMatch As String = "No player matching %e was banned."
 
@@ -22,7 +22,7 @@
         Dim affectedUsername As String = Me.adminIface.SQL.UnbanPlayerByNameMatch(params(1))
 
         If Not affectedUsername Is Nothing Then
-            Me.Pm(Me.ParseTemplate(Me.OnBan, {affectedUsername, player.UserName}, {"u", "a"}), player)
+            Me.Pm(Me.ParseTemplate(Me.OnUnBan, {affectedUsername, player.UserName}, {"u", "a"}), player)
         Else
             Me.Pm(Me.ParseTemplate(Me.OnNoPlayerMatch, {params(1)}, {"e"}), player)
         End If
