@@ -25,6 +25,7 @@ Public Class User
     Public Property Kills As Int32
     Public Property Deaths As Int32
     Public Property IsBanned As Boolean
+    Public Property PlayTime As Single
 
     Public Property IsRegistered As Boolean = False
     Public Property GroupId As Int32 = -1

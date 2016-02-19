@@ -16,9 +16,9 @@
 'Constants
 Public Class Constants
     Public Const PRODUCT_NAME As String = "SWBF2-SADS Admin Helper"
-    Public Const PRODUCT_VERSION As String = "3.3"
+    Public Const PRODUCT_VERSION As String = "3.0"
     Public Const PRODUCT_VENDOR As String = "JW 'LeKeks' 2015"
-    Public Const PRODUCT_BANNER As String = "SWBF2 Admin Helper v3.3 / LeKeks (Customized by Yoni) 2015"
+    Public Const PRODUCT_BANNER As String = "SWBF2 Admin Helper v3.0 / LeKeks 2015"
 
     Public Const CFG_DIR As String = "/cfg"
     Public Const CFG_CMD_DIR As String = "/cmd"
@@ -27,11 +27,11 @@ Public Class Constants
     Public Const CFG_ANNOUNCE As String = "/announce.xml"
     Public Const CFG_DYNCOMMAND As String = "/dyncommand.xml"
 
-    Public Const SQL_GROUPS_TABLE As String = "ai_groups"
-    Public Const SQL_PERMISSIONS_TABLE As String = "ai_permissions"
-    Public Const SQL_PLAYERS_TABLE As String = "ai_players"
-    Public Const SQL_USERS_TABLE As String = "ai_users"
-    Public Const SQL_BANS_TABLE As String = "ai_bans"
+    Public Const MYSQL_GROUPS_TABLE As String = "ai_groups"
+    Public Const MYSQL_PERMISSIONS_TABLE As String = "ai_permissions"
+    Public Const MYSQL_PLAYERS_TABLE As String = "ai_players"
+    Public Const MYSQL_USERS_TABLE As String = "ai_users"
+    Public Const MYSQL_BANS_TABLE As String = "ai_bans"
 
     Public Const CMD_EXIT As String = "exit"
 
@@ -46,5 +46,12 @@ Public Class Constants
     Public Const MEM_1_1_CLIENT_BASE As Int32 = &HC22408
     Public Const MEM_1_1_PLAYER_BASE As Int32 = &HC09F68
     Public Const MEM_1_1_ADMINPASSWORD As Int32 = &HC06978
+
+    Public Const MEM_1_1_DYNAMIC_PTR As Int32 = &H791C58
+
+    Public Const MEM_1_1_OFFSET_X As Int32 = &H120
+    Public Const MEM_1_1_OFFSET_Y As Int32 = &H120 + 4
+    Public Const MEM_1_1_OFFSET_Z As Int32 = &H120 + 8
+
 
 End Class

@@ -51,7 +51,7 @@ Public Class ProcessMemoryReader
 
     Private proc As Process
     Private procHwnd As IntPtr
-    Private addrBuffer(63, 5) As Int32
+    Private addrBuffer(63, 7) As Int32
 
     Private Const PROC_RW As Int32 = &H1F0FFF
 
@@ -151,6 +151,8 @@ Public Class ProcessMemoryReader
             addrBuffer(0, 3) = Constants.MEM_1_1_PLAYER_BASE + &H18      'Ping
             addrBuffer(0, 4) = Constants.MEM_1_1_PLAYER_BASE + &H1C      'Stats
             addrBuffer(0, 5) = Constants.MEM_1_1_CLIENT_BASE + &H70      'TeamID
+            addrBuffer(0, 6) = Constants.MEM_1_1_PLAYER_BASE + &H20      'Deathcount
+            addrBuffer(0, 7) = Constants.MEM_1_1_PLAYER_BASE + &H10      'play time
 
             For i = 1 To 63
                 addrBuffer(i, 0) = addrBuffer(i - 1, 0) + 612 + 4
@@ -159,6 +161,8 @@ Public Class ProcessMemoryReader
                 addrBuffer(i, 3) = addrBuffer(i - 1, 3) + 92
                 addrBuffer(i, 4) = addrBuffer(i - 1, 4) + 92
                 addrBuffer(i, 5) = addrBuffer(i - 1, 5) + 612 + 4
+                addrBuffer(i, 6) = addrBuffer(i - 1, 6) + 92
+                addrBuffer(i, 7) = addrBuffer(i - 1, 7) + 92
             Next
         End If
     End Sub
@@ -219,6 +223,8 @@ Public Class ProcessMemoryReader
             .Ping = Me.ReadByte(Me.addrBuffer(playerId, 3))
             .Points = Me.ToSByte(Me.ReadByte(Me.addrBuffer(playerId, 4)))
             .TeamId = Me.ReadByte(Me.addrBuffer(playerId, 5))
+            .Deaths = Me.ReadByte(Me.addrBuffer(playerId, 6))
+            .PlayTime = Me.ReadFloat(Me.addrBuffer(playerId, 7))
         End With
         Return player
     End Function
