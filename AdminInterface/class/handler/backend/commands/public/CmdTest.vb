@@ -15,8 +15,8 @@
 Public Class CmdTest
     Inherits Command
 
-    Public Property OnTestRegistered As String = "You are User %u, Slot %s, User-ID: %i, Group: %g"
-    Public Property OnTestPlayer As String = "You are Player %u, Slot %s. You are not registered."
+    Public Property OnTestRegistered As String = "User %u, Slot %s, User-ID: %i, Group: %g"
+    Public Property OnTestPlayer As String = "Player %u, Slot %s. You are not registered."
     Public Property OnSyntaxError As String = "Syntax: #test [<user>]"
     Public Property OnInvalidPermissions As String = "You cannot test other players!"
     Public Property OnPlayerNotFound As String = "Player %p does not match a specific user!"
