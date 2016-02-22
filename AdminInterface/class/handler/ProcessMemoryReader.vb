@@ -18,32 +18,32 @@ Imports System.Runtime.InteropServices
 Public Class ProcessMemoryReader
 
     'Load some kernelapi-funcs:
-    <DllImport("kernel32.dll")> _
-    Private Shared Function OpenProcess( _
+    <DllImport("kernel32.dll")>
+    Private Shared Function OpenProcess(
       ByVal dwDesiredAccess As Integer,
       ByVal bInheritHandle As Integer,
       ByVal dwProcessId As Integer) As IntPtr
     End Function
 
-    <DllImport("kernel32.dll", SetLastError:=True)> _
+    <DllImport("kernel32.dll", SetLastError:=True)>
     Private Shared Function CloseHandle(ByVal hObject As IntPtr) As Boolean
     End Function
 
-    <DllImport("kernel32.dll")> _
-    Private Shared Function ReadProcessMemory( _
-       ByVal hProcess As IntPtr, _
-       ByVal lpBaseAddress As IntPtr, _
-       <Out()> ByVal lpBuffer As Byte(), _
-       ByVal dwSize As Integer, _
+    <DllImport("kernel32.dll")>
+    Private Shared Function ReadProcessMemory(
+       ByVal hProcess As IntPtr,
+       ByVal lpBaseAddress As IntPtr,
+       <Out()> ByVal lpBuffer As Byte(),
+       ByVal dwSize As Integer,
        ByRef lpNumberOfBytesRead As Integer) As Boolean
     End Function
 
-    <DllImport("kernel32.dll")> _
-    Private Shared Function WriteProcessMemory( _
-        ByVal hProcess As IntPtr, _
-        ByVal lpBaseAddress As IntPtr, _
-        ByVal lpBuffer As Byte(), _
-        ByVal nSize As UInt32, _
+    <DllImport("kernel32.dll")>
+    Private Shared Function WriteProcessMemory(
+        ByVal hProcess As IntPtr,
+        ByVal lpBaseAddress As IntPtr,
+        ByVal lpBuffer As Byte(),
+        ByVal nSize As UInt32,
         ByRef lpNumberOfBytesWritten As UInt32) As Boolean
     End Function
 
