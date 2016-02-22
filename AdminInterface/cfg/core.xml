@@ -54,13 +54,13 @@
   <!--Prefix for ingame-commands, you might want to change this to prevent incompatibility with other server managers-->
   <CommandPrefix>#</CommandPrefix>
   
-  <!--MySQL-server setup. MySQL is required for operation.-->
-  <!--To prepare the database, run adminmod.sql-->
+  <!--SQL server setup. If you choose not to use MySQL, a default SQLite DB is included.-->
+  <!--To prepare the database, if you are using MySQL, run adminmod.sql-->
   <UseMySQL>false</UseMySQL> <!-- If false, will use SQLite -->
   <MySQLHostname>localhost</MySQLHostname>	<!--MySQL-server's IP or hostname-->
   <MySQLPort>3306</MySQLPort>				<!--MySQL-server's port (3306 std.)-->
   <MySQLUser>root</MySQLUser>				<!--MySQL-user-->
   <MySQLPassword />							<!--User's password-->
-  <SQLDatabase>adminmod</SQLDatabase>	<!--database name-->
+  <SQLDatabase>C:\Users\Jonathan\Desktop\adminmod</SQLDatabase>	<!--database name-->
   
 </CoreConfig>

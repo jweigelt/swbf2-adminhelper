@@ -235,10 +235,10 @@ Public Class SQLHandler
         Dim sql As String = "
             INSERT INTO " & Constants.SQL_PLAYERS_TABLE & "
             (username, keyhash, lastip, lastseen) VALUES
-            (@username, @keyhash, @lastip, @lastseen)
+            (@username, @keyhash, @lastip, " & GetSQLNow() & ")
         "
-        Dim names As Array = {"@username", "@keyhash", "@lastip", "@lastseen"}
-        Dim values As Array = {player.UserName, player.KeyHash, player.IPAddress.ToString, GetSQLNow()}
+        Dim names As Array = {"@username", "@keyhash", "@lastip"}
+        Dim values As Array = {player.UserName, player.KeyHash, player.IPAddress.ToString}
         Me.NonQuery(sql, names, values)
     End Sub
 
@@ -341,22 +341,22 @@ Public Class SQLHandler
         Dim sql As String = "
             INSERT INTO " & Constants.SQL_BANS_TABLE & "
             (player, admin, duration, `type`, `time`) VALUES
-            (@playerId, @adminId, @duration, @type, @timestamp)
+            (@playerId, @adminId, @duration, @type, " & GetSQLNow() & ")
         "
-        Dim names As Array = {"@playerId", "@adminId", "@duration", "@type", "@timestamp"}
-        Dim values As Array = {affectedUser.playerId, admin.UserId, duration.ToString, IIf(ipBan, "1", "0").ToString, GetSQLNow()}
+        Dim names As Array = {"@playerId", "@adminId", "@duration", "@type"}
+        Dim values As Array = {affectedUser.playerId, admin.UserId, duration.ToString, IIf(ipBan, "1", "0").ToString}
         Me.NonQuery(sql, names, values)
     End Sub
 
     Public Function IsBanned(ByVal player As User) As Boolean
-        Dim sql As String = "SELECT ai_bans.id FROM " & Constants.SQL_BANS_TABLE &
+        Dim sql As String = "SELECT " & Constants.SQL_BANS_TABLE & ".id FROM " & Constants.SQL_BANS_TABLE &
         " LEFT JOIN " & Constants.SQL_PLAYERS_TABLE & " on " & Constants.SQL_BANS_TABLE & ".player =" & Constants.SQL_PLAYERS_TABLE & ".id" &
         " WHERE ((`keyhash` = @keyhash AND `type` = 0) " &
         " OR (`lastip` = @lastip AND `type` = 1)) " &
-        " AND (`time` + `duration` > @timestamp OR `duration` < 0)"
+        " AND (`time` + `duration` > " & GetSQLNow() & " OR `duration` < 0)"
 
-        Dim names As Array = {"@keyhash", "@lastip", "@timestamp"}
-        Dim values As Array = {player.KeyHash, player.IPAddress.ToString(), GetSQLNow()}
+        Dim names As Array = {"@keyhash", "@lastip"}
+        Dim values As Array = {player.KeyHash, player.IPAddress.ToString()}
         Using r = Me.DoQuery(sql, names, values)
             If r.HasRows Then
                 r.Close()
@@ -368,12 +368,48 @@ Public Class SQLHandler
         End Using
     End Function
 
+    Public Function GetBans(Optional start_at As String = "0") As List(Of List(Of String))
+        Dim limit As String = "1000"
+        If start_at <> "0" Then
+            limit = "10"
+        End If
+        Dim sql As String = "
+            SELECT " & Constants.SQL_BANS_TABLE & ".id, `" & Constants.SQL_USERS_TABLE & "`.username as admin_name, time, duration, type,
+            " & Constants.SQL_PLAYERS_TABLE & ".username, " & Constants.SQL_PLAYERS_TABLE & ".keyhash, lastip FROM " & Constants.SQL_BANS_TABLE & "
+            LEFT JOIN " & Constants.SQL_PLAYERS_TABLE & " ON player=" & Constants.SQL_PLAYERS_TABLE & ".id
+            LEFT JOIN `" & Constants.SQL_USERS_TABLE & "` ON `" & Constants.SQL_USERS_TABLE & "`.id=admin
+            LIMIT @start_at, @limit;
+        "
+        Dim ret As List(Of List(Of String)) = New List(Of List(Of String))
+        Using r = Me.DoQuery(sql, {"@start_at", "@limit"}, {start_at, limit})
+            If r.HasRows Then
+                While r.Read()
+                    Dim item As List(Of String) = New List(Of String)
+                    item.Add(r("id"))
+                    item.Add(r("admin_name"))
+                    item.Add(r("time"))
+                    item.Add(IIf(r("duration") = -1, "Permanent", r("duration")))
+                    item.Add(IIf(r("type") = 0, "KeyHash", "IP"))
+                    item.Add(r("username"))
+                    item.Add(r("keyhash"))
+                    item.Add(r("lastip"))
+                    ret.Add(item)
+                End While
+            Else
+                Return Nothing
+            End If
+        End Using
+        If ret.Count > 0 Then
+            Return ret
+        Else
+            Return Nothing
+        End If
+    End Function
+
     Public Sub RunCleanup()
         Logger.Log(LogTemplate.SQL_CLEANUP, LogLevel.info)
-        Dim sql As String = "DELETE FROM `" & Constants.SQL_BANS_TABLE & "` WHERE `time` + `duration` < @timestamp AND `duration` > 0"
-        Dim names As Array = {"@timestamp"}
-        Dim values As Array = {GetSQLNow()}
-        Me.NonQuery(sql, names, values)
+        Dim sql As String = "DELETE FROM `" & Constants.SQL_BANS_TABLE & "` WHERE `time` + `duration` < " & GetSQLNow() & " AND `duration` > 0"
+        Me.NonQuery(sql)
     End Sub
 
     Public Function GetGroupId(ByVal name As String) As Int32

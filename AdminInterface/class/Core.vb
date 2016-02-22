@@ -140,6 +140,8 @@ Public Class Core
             .RegisterCommand(GetType(CmdUnban), "unban")
             .RegisterCommand(GetType(CmdIpBan), "ipban")
             .RegisterCommand(GetType(CmdTempIpBan), "tempipban")
+            .RegisterCommand(GetType(CmdDumpBans), "dumpbans")
+            .RegisterCommand(GetType(CmdListBans), "listbans")
             .RegisterCommand(GetType(CmdEndgame), "endgame")
             .RegisterCommand(GetType(CmdBots), "bots")
             .RegisterCommand(GetType(CmdSwap), "swap")
