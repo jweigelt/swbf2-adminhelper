@@ -145,6 +145,7 @@ Public Class Core
             .RegisterCommand(GetType(CmdEndgame), "endgame")
             .RegisterCommand(GetType(CmdBots), "bots")
             .RegisterCommand(GetType(CmdSwap), "swap")
+            .RegisterCommand(GetType(CmdCheckBalance), "checkbalance")
             .RegisterCommand(GetType(CmdTempBan), "tempban")
             .RegisterCommand(GetType(CmdTest), "test")
             .RegisterCommand(GetType(CmdNameQuery), "nquery")
