@@ -15,11 +15,12 @@
 Public Class CmdTempBan
     Inherits Command
 
-    Public Property OnBan As String = "%u was banned(%t) by %a."
-    Public Property OnBanReason As String = "%u was banned(%t) by %a for %r"
-    Public Property OnSyntaxError As String = "Syntax: !tempban <user> <duration> <reason>"
+    Public Property OnBan As String = "%u was temporarily banned(%t) by %a."
+    Public Property OnBanReason As String = "%u was temporarily banned(%t) by %a for %r"
+    Public Property OnSyntaxError As String = "Syntax: !tempban <user> <reason>"
     Public Property OnNoPlayerMatch As String = "No player matching %e could be found!"
     'Public Property OnNoPermission As String = "You can't ban %p (no permission)."
+    Public Property TempBanLength As Integer = 604800000 '1 week
 
     Sub New()
         Me.CommandAlias = "tempban"
@@ -30,13 +31,7 @@ Public Class CmdTempBan
     Public Overrides Function Execute(ByVal commandStr As String, ByVal player As User) As Boolean
         Dim params() As String = Split(commandStr, " ")
 
-        If params.Length < 3 Then 'Kein Suchstring
-            Me.Say(Me.OnSyntaxError)
-            Return False
-        End If
-
-        Dim duration As Int32 = 0
-        If Not Int32.TryParse(params(2), duration) Then
+        If params.Length < 2 Then 'Kein Suchstring
             Me.Say(Me.OnSyntaxError)
             Return False
         End If
@@ -47,19 +42,19 @@ Public Class CmdTempBan
             Return False
         End If
 
-        If params.Length > 3 Then
+        If params.Length > 2 Then
             Dim reason As String = String.Join(" ", params, 3, params.Length - 3)
-            Me.Say(Me.ParseTemplate(Me.OnBanReason, {affectedUser.UserName, player.UserName, reason, duration.ToString()}, {"u", "a", "r", "t"}))
+            Me.Say(Me.ParseTemplate(Me.OnBanReason, {affectedUser.UserName, player.UserName, reason, TempBanLength.ToString()}, {"u", "a", "r", "t"}))
         Else
-            Me.Say(Me.ParseTemplate(Me.OnBan, {affectedUser.UserName, player.UserName, duration.ToString()}, {"u", "a", "t"}))
+            Me.Say(Me.ParseTemplate(Me.OnBan, {affectedUser.UserName, player.UserName, TempBanLength.ToString()}, {"u", "a", "t"}))
         End If
 
-        Me.SubmitBan(affectedUser, player, duration)
+        Me.SubmitBan(affectedUser, player, TempBanLength)
         Me.adminIface.RCClient.SendRaw("kick " & affectedUser.SlotId)
         Return True
     End Function
 
-    Public Overridable Sub SubmitBan(ByVal affectedUser As User, ByVal player As User, ByVal duration As Int32)
+    Public Overridable Sub SubmitBan(ByVal affectedUser As User, ByVal player As User, ByVal duration As Integer)
         Me.adminIface.SQL.InsertBan(affectedUser, player, False, duration)
     End Sub
 End Class

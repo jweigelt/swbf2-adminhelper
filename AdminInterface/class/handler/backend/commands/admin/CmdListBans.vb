@@ -32,7 +32,7 @@
 
         Dim banStr As String = ""
         For Each ban As List(Of String) In banList
-            banStr &= ban(1)
+            banStr &= ban(5)
             banStr &= ", "
         Next
         banStr = banStr.Substring(0, banStr.Length - 2)

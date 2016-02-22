@@ -335,7 +335,7 @@ Public Class SQLHandler
         Return users
     End Function
 
-    Public Sub InsertBan(ByVal affectedUser As User, ByVal admin As User, ByVal ipBan As Boolean, Optional ByVal duration As Int16 = -1)
+    Public Sub InsertBan(ByVal affectedUser As User, ByVal admin As User, ByVal ipBan As Boolean, Optional ByVal duration As Integer = -1)
         Me.GetPlayerDetails(affectedUser)
         Me.GetUserDetails(admin)
         Dim sql As String = "
@@ -374,7 +374,7 @@ Public Class SQLHandler
             limit = "10"
         End If
         Dim sql As String = "
-            SELECT " & Constants.SQL_BANS_TABLE & ".id, `" & Constants.SQL_USERS_TABLE & "`.username as admin_name, time, duration, type,
+            SELECT " & Constants.SQL_BANS_TABLE & ".id, `" & Constants.SQL_USERS_TABLE & "`.username as admin_name, `" & Constants.SQL_BANS_TABLE & "`.`time` as banned_on, duration, type,
             " & Constants.SQL_PLAYERS_TABLE & ".username, " & Constants.SQL_PLAYERS_TABLE & ".keyhash, lastip FROM " & Constants.SQL_BANS_TABLE & "
             LEFT JOIN " & Constants.SQL_PLAYERS_TABLE & " ON player=" & Constants.SQL_PLAYERS_TABLE & ".id
             LEFT JOIN `" & Constants.SQL_USERS_TABLE & "` ON `" & Constants.SQL_USERS_TABLE & "`.id=admin
@@ -387,9 +387,9 @@ Public Class SQLHandler
                     Dim item As List(Of String) = New List(Of String)
                     item.Add(r("id"))
                     item.Add(r("admin_name"))
-                    item.Add(r("time"))
-                    item.Add(IIf(r("duration") = -1, "Permanent", r("duration")))
-                    item.Add(IIf(r("type") = 0, "KeyHash", "IP"))
+                    item.Add(r("banned_on"))
+                    item.Add(IIf(r("duration") = "-1", "Permanent", r("duration")))
+                    item.Add(IIf(r("type") = "0", "KeyHash", "IP"))
                     item.Add(r("username"))
                     item.Add(r("keyhash"))
                     item.Add(r("lastip"))
