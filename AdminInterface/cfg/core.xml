@@ -23,9 +23,9 @@
   
   <!--Remote console server setup-->
   <!--<RconHostname>10.236.4.13</RconHostname>		server's ip-address or hostname-->
-  <RconHostname>192.168.1.5</RconHostname>
+  <RconHostname>192.168.56.1</RconHostname>
   <RconPort>4658</RconPort>						<!--server's >>Remote Console<< port (TCP, default: 4658)-->
-  <RconPassword>123</RconPassword>
+  <RconPassword>specialsauce</RconPassword>
   
   <!--
     set this to false if you want the playerlist to be fetched from memory
@@ -61,6 +61,6 @@
   <MySQLPort>3306</MySQLPort>				<!--MySQL-server's port (3306 std.)-->
   <MySQLUser>root</MySQLUser>				<!--MySQL-user-->
   <MySQLPassword />							<!--User's password-->
-  <SQLDatabase>C:\Users\Jonathan\Desktop\adminmod</SQLDatabase>	<!--database name-->
+  <SQLDatabase>C:\Users\yonil\code\swbf2-adminhelper\AdminInterface\bin\x86\Release\adminmod</SQLDatabase>	<!--database name-->
   
 </CoreConfig>
