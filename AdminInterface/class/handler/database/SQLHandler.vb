@@ -40,6 +40,7 @@ Public Class SQLHandler
     Public Function Init() As Boolean
         Logger.Log(LogTemplate.SQL_TYPE, LogLevel.info, GetDbTypeString)
         If DbType = DbTypes.SQLite Then
+            Console.WriteLine("SQLIte " & Me.DbName)
             connection = New SQLiteConnection("Data Source=" & Me.DbName & ".db")
         Else
             connection = New MySqlConnection

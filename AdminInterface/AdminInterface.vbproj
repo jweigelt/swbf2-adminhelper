@@ -150,6 +150,7 @@
     <Compile Include="class\handler\backend\commands\admin\CmdUnban.vb" />
     <Compile Include="class\handler\backend\commands\admin\CmdDumpBans.vb" />
     <Compile Include="class\handler\backend\commands\game\CmdCheckBalance.vb" />
+    <Compile Include="class\handler\backend\commands\game\CmdMods.vb" />
     <Compile Include="class\handler\backend\commands\game\CmdRestart.vb" />
     <Compile Include="class\handler\backend\commands\game\CmdScore.vb" />
     <Compile Include="class\handler\backend\commands\public\CmdTeamStats.vb" />
