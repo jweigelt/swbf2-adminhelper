@@ -74,13 +74,31 @@ Public Class PlayerHandler
             Next
         End If
 
+        If Not Me.PlayerList Is Nothing Then
+            'Check if any events have to be triggered
+            For Each player As User In plist
+                If player.KeyHash <> String.Empty Then
+                    Dim u As User = CheckForKeyhash(player, Me.PlayerList)
+
+                    If u Is Nothing Then
+                        player.IsBanned = Me.AdminIface.SQL.IsBanned(player)
+                        Me.AdminIface.SQL.GetUserDetails(player)
+                        Me.OnPlayerJoin(player)
+                    Else
+                        player.IsBanned = u.IsBanned
+                    End If
+                    If player.IsBanned Then Me.KickPlayer(player)
+                End If
+            Next
+        End If
+
         For Each player As User In plist
-            ' Tracker is a list (lastPoints, calcKills)
+            ' Tracker is a list (lastPoints, calcKills, deaths)
             Dim tracker As List(Of Int32)
 
             Dim success As Boolean = PlayerPointsTracker.TryGetValue(player.KeyHash, tracker)
             If success <> True Then
-                tracker = New List(Of Int32) From {0, 0}
+                tracker = New List(Of Int32) From {0, 0, 0}
             End If
 
             Dim killsToAdd As Int32 = 0
@@ -100,29 +118,27 @@ Public Class PlayerHandler
                 killsToAdd = Math.Floor(player.Points / 2)
             End If
 
+            If killsToAdd <> 0 OrElse player.Deaths > tracker(2) Then
+                Dim u As User = CheckForKeyhash(player, Me.PlayerList)
+                If u Is Nothing Then
+                    Continue For
+                End If
+                If u.UserName = "Jean" OrElse u.UserName = "^Sketchup^" Then
+                    If killsToAdd Then
+                        Me.AdminIface.RCClient.Say("Hey " & u.UserName & ", why you tryharding?")
+                    End If
+                    If player.Deaths > tracker(2) Then
+                        Me.AdminIface.RCClient.Say("Get rekt " & u.UserName)
+                    End If
+                End If
+            End If
+
             tracker(1) = tracker(1) + killsToAdd
             tracker(0) = player.Points
+            tracker(2) = player.Deaths
 
             PlayerPointsTracker(player.KeyHash) = tracker
         Next
-
-        If Not Me.PlayerList Is Nothing Then
-            'Check if any events have to be triggered
-            For Each player As User In plist
-                If player.KeyHash <> String.Empty Then
-                    Dim u As User = CheckForKeyhash(player, Me.PlayerList)
-
-                    If u Is Nothing Then
-                        player.IsBanned = Me.AdminIface.SQL.IsBanned(player)
-                        Me.AdminIface.SQL.GetUserDetails(player)
-                        Me.OnPlayerJoin(player)
-                    Else
-                        player.IsBanned = u.IsBanned
-                    End If
-                    If player.IsBanned Then Me.KickPlayer(player)
-                End If
-            Next
-        End If
 
         Me.PlayerList = plist
     End Sub
