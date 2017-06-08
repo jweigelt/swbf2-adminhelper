@@ -17,7 +17,7 @@
 Public Class Core
     Public Property RCClient As RconClient
     Public Property CCSerializer As ConfigSerializer
-    Public Property SyncSheduler As Sheduler
+    Public Property SyncSheduler As Scheduler
     Public Property PHandler As PlayerHandler
     Public Property CHandler As CommandHandler
     Public Property AHandler As AnnounceHandler
@@ -45,7 +45,7 @@ Public Class Core
         Me.CCSerializer = New ConfigSerializer(GetType(CoreConfig))
         Me.IGTSerializer = New ConfigSerializer(GetType(IngameTemplate))
         Me.DCSerializer = New ConfigSerializer(GetType(DyncommandConfig))
-        Me.SyncSheduler = New Sheduler()
+        Me.SyncSheduler = New Scheduler()
         Me.SQL = New SQLHandler()
         Me.PHandler = New PlayerHandler(Me)
         Me.CHandler = New CommandHandler(Me)
@@ -127,7 +127,7 @@ Public Class Core
             .RconPlayerHandling = Me.Config.RconPlayerHandling
             .Slots = Me.Config.ServerInfo.MaxPlayers
             If Not .Init() Then Return False
-            Me.SyncSheduler.PushRepeatingTask(New RepeatingShedulerTask(AddressOf .UpdatePlayerList), Me.Config.ListRefreshDelay)
+            Me.SyncSheduler.PushRepeatingTask(New RepeatingSchedulerTask(AddressOf .UpdatePlayerList), Me.Config.ListRefreshDelay)
         End With
 
         'CommandHandler
@@ -184,7 +184,7 @@ Public Class Core
                 ElseIf cmd(0) = "/" Then
                     Dim p As New GenericCommandPacket
                     p.CommandAlias = Mid(cmd, 2)
-                    Me.SyncSheduler.PushTask(New ShedulerTask(AddressOf Me.SendUserPacket, p))
+                    Me.SyncSheduler.PushTask(New SchedulerTask(AddressOf Me.SendUserPacket, p))
                 Else
                     Select Case cmd
                         Case Constants.CMD_EXIT
@@ -259,7 +259,7 @@ Public Class Core
     End Sub
 
     Private Sub Server_GameEnded(ByVal sender As Object)
-        Dim t As New ShedulerTask(AddressOf Me.QueryServerInfo)
+        Dim t As New SchedulerTask(AddressOf Me.QueryServerInfo)
         Me.SyncSheduler.PushTask(t)
         Me.PHandler.PlayerPointsTracker.Clear()
 

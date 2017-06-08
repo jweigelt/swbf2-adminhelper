@@ -28,7 +28,7 @@ Public Class AnnounceHandler
         Me.aCSerializer = New ConfigSerializer(GetType(AnnounceConfig))
         Me.config = Me.aCSerializer.loadFromFile(Constants.CFG_ANNOUNCE, CurDir() & Constants.CFG_DIR)
         If Me.config.AnnounceList.Count > 0 Then
-            Me.adminIface.SyncSheduler.PushRepeatingTask(New RepeatingShedulerTask(AddressOf Me.DoAnnounce), Me.config.AnnounceInterval)
+            Me.adminIface.SyncSheduler.PushRepeatingTask(New RepeatingSchedulerTask(AddressOf Me.DoAnnounce), Me.config.AnnounceInterval)
         End If
         Return True
     End Function

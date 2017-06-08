@@ -13,8 +13,8 @@
 'You should have received a copy of the GNU General Public License
 'along with SWBF2 SADS-Administation Helper.  If not, see <http://www.gnu.org/licenses/>.
 
-Public Class RepeatingShedulerTask
-    Inherits ShedulerTask
+Public Class RepeatingSchedulerTask
+    Inherits SchedulerTask
     Private lastExecution As Int64
     Private startTime As DateTime
     Public Property Interval As Int32 = 1000

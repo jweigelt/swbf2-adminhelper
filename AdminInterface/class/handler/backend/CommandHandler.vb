@@ -49,7 +49,7 @@ Public Class CommandHandler
             If cmd.CommandAlias.Contains(commandAlias) Then
                 If Me.AdminIface.PHandler.HasPermission(player, cmd) Or cmd.IsPublic Then
                     Logger.Log(LogTemplate.CMD_EXECUTED, LogLevel.info, player.UserName, commandStr)
-                    Me.AdminIface.SyncSheduler.PushTask(New ShedulerTask(AddressOf Me.CommandProxy, {cmd, commandStr, player}))
+                    Me.AdminIface.SyncSheduler.PushTask(New SchedulerTask(AddressOf Me.CommandProxy, {cmd, commandStr, player}))
                     Return
                 Else
                     Logger.Log(LogTemplate.CMD_NO_PERMISSION, LogLevel.info, player.UserName, commandStr)

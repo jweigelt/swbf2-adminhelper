@@ -181,9 +181,9 @@
     <Compile Include="class\handler\RconClient.vb" />
     <Compile Include="class\handler\database\SQLHandler.vb" />
     <Compile Include="class\handler\template\IngameTemplate.vb" />
-    <Compile Include="class\sheduler\RepeatingShedulerTask.vb" />
-    <Compile Include="class\sheduler\Sheduler.vb" />
-    <Compile Include="class\sheduler\ShedulerTask.vb" />
+    <Compile Include="class\scheduler\RepeatingSchedulerTask.vb" />
+    <Compile Include="class\scheduler\Scheduler.vb" />
+    <Compile Include="class\scheduler\SchedulerTask.vb" />
     <Compile Include="class\handler\struct\ServerInformation.vb" />
     <Compile Include="class\handler\struct\User.vb" />
     <Compile Include="module\Constants.vb" />

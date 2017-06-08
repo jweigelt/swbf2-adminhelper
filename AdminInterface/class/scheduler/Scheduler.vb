@@ -16,10 +16,11 @@
 'Scheduler-Class
 'As several components share the same resources they have to use the same thread so access them
 'p.e. we can't send while receiving another packet
-Public Class Sheduler
+Imports System.Collections.Concurrent
+Public Class Scheduler
 
-    Private tasks As Queue(Of ShedulerTask)
-    Private repeatingTasks As List(Of RepeatingShedulerTask)
+    Private tasks As ConcurrentQueue(Of SchedulerTask)
+    Private repeatingTasks As List(Of RepeatingSchedulerTask)
     Private ticks As UInt32
     Private workThread As Threading.Thread
     Private _running As Boolean
@@ -62,29 +63,37 @@ Public Class Sheduler
     End Sub
 
     Sub New()
-        Me.tasks = New Queue(Of ShedulerTask)
-        Me.repeatingTasks = New List(Of RepeatingShedulerTask)
+        Me.tasks = New ConcurrentQueue(Of SchedulerTask)
+        Me.repeatingTasks = New List(Of RepeatingSchedulerTask)
     End Sub
 
-    Public Sub PushTask(ByVal tsk As ShedulerTask)
+    Public Sub PushTask(ByVal tsk As SchedulerTask)
         Me.tasks.Enqueue(tsk)
     End Sub
 
-    Public Sub PushRepeatingTask(ByVal tsk As RepeatingShedulerTask, ByVal interval As Int32)
+    Public Sub PushRepeatingTask(ByVal tsk As RepeatingSchedulerTask, ByVal interval As Int32)
         tsk.Interval = interval
         Me.repeatingTasks.Add(tsk)
     End Sub
 
     Public Sub ClearQueue()
-        Me.tasks.Clear()
+        Dim tsk As SchedulerTask = Nothing
+        While Me.tasks.Count > 0
+            Me.tasks.TryDequeue(tsk)
+        End While
+
         Me.repeatingTasks.Clear()
     End Sub
 
     Private Sub Tick()
         If Me.tasks.Count > 0 Then
-            Me.tasks.Dequeue.Run()
+            Dim tsk As SchedulerTask = Nothing
+
+            If (Me.tasks.TryDequeue(tsk)) Then
+                tsk.Run()
+            End If
         End If
-        For Each t As RepeatingShedulerTask In Me.repeatingTasks
+        For Each t As RepeatingSchedulerTask In Me.repeatingTasks
             t.Tick()
         Next
     End Sub
