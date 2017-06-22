@@ -118,20 +118,20 @@ Public Class PlayerHandler
                 killsToAdd = Math.Floor(player.Points / 2)
             End If
 
-            If killsToAdd <> 0 OrElse player.Deaths > tracker(2) Then
-                Dim u As User = CheckForKeyhash(player, Me.PlayerList)
-                If u Is Nothing Then
-                    Continue For
-                End If
-                If u.UserName = "Jean" OrElse u.UserName = "^Sketchup^" Then
-                    If killsToAdd Then
-                        Me.AdminIface.RCClient.Say("Hey " & u.UserName & ", why you tryharding?")
-                    End If
-                    If player.Deaths > tracker(2) Then
-                        Me.AdminIface.RCClient.Say("Get rekt " & u.UserName)
-                    End If
-                End If
-            End If
+            'If killsToAdd <> 0 OrElse player.Deaths > tracker(2) Then
+            '    Dim u As User = CheckForKeyhash(player, Me.PlayerList)
+            '    If u Is Nothing Then
+            '        Continue For
+            '    End If
+            '    If u.UserName = "Jean" OrElse u.UserName = "^Sketchup^" Then
+            '        If killsToAdd Then
+            '            Me.AdminIface.RCClient.Say("Hey " & u.UserName & ", why you tryharding?")
+            '        End If
+            '        If player.Deaths > tracker(2) Then
+            '            Me.AdminIface.RCClient.Say("Get rekt " & u.UserName)
+            '        End If
+            '    End If
+            'End If
 
             tracker(1) = tracker(1) + killsToAdd
             tracker(0) = player.Points
