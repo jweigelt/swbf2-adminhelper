@@ -15,7 +15,6 @@
 
 'SWBF2-SADS Remote Console Client
 Imports System.Security.Cryptography
-Imports System.Text
 Imports System.Net.Sockets
 Public Class RconClient
 
@@ -76,6 +75,7 @@ Public Class RconClient
     End Function
 
     Public Sub SendRaw(ByVal raw As String)
+        raw = raw.Replace("/", "\")
         Dim gpc As New GenericCommandPacket
         gpc.CommandAlias = raw
         Me.SendPacket(gpc)
@@ -259,13 +259,13 @@ Public Class RconClient
         '-> fragment it
         Dim cmd As String
         If Not user Is Nothing Then
-            cmd = "/warn " & user.SlotId.ToString() & " "
+            cmd = "warn " & user.SlotId.ToString() & " "
         Else
-            cmd = "/say "
+            cmd = "say "
         End If
 
         If str.Length <= 100 Then
-            Me.Send(cmd & str)
+            Me.SendRaw(cmd & str)
             Exit Sub
         End If
         Dim cache As String = str
@@ -282,7 +282,7 @@ Public Class RconClient
             End If
         End While
         For Each line As String In lines
-            Me.Send(cmd & line)
+            Me.SendRaw(cmd & line)
         Next
     End Sub
 End Class
