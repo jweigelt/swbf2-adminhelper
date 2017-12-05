@@ -23,7 +23,7 @@ Public Class CoreConfig
 
     Public Property RconHostname As String = "localhost"
     Public Property RconPort As UInt16 = 4658
-    Public Property RconPassword As String = "123"
+    Public Property RconPassword As String = "1234"
     Public Property RconPlayerHandling As Boolean = False
 
     Public Property LoginAutoFetch As Boolean = False

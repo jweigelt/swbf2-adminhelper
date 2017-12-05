@@ -55,7 +55,14 @@ Public Class PlayerlistPacket
                 .Kills = Int32.Parse(RTrim(Mid(r, 30, 3)))
                 .Deaths = Int32.Parse(RTrim(Mid(r, 34, 3)))
                 .Ping = Int32.Parse(RTrim(Mid(r, 38, 4)))
+<<<<<<< Updated upstream
                 .IPAddress = ipa
+=======
+                If (Not Net.IPAddress.TryParse(RTrim(Mid(r, 42, 15)), .IPAddress)) Then
+                    .IPAddress = New Net.IPAddress({0, 0, 0, 0})
+                End If
+
+>>>>>>> Stashed changes
                 .KeyHash = RTrim(Mid(r, 58, 32))
             End With
             Me.PlayerList.Add(u)
