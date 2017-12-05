@@ -13,6 +13,8 @@
 'You should have received a copy of the GNU General Public License
 'along with SWBF2 SADS-Administation Helper.  If not, see <http://www.gnu.org/licenses/>.
 
+Imports System.Net
+
 Public Class PlayerlistPacket
     Inherits TcpPacket
 
@@ -34,7 +36,16 @@ Public Class PlayerlistPacket
             If r.Trim = "done" Then
                 Continue For
             End If
-            Dim u As New User
+            Dim u As New User()
+
+            'NOTE: GOG's new swbf2 doesn't return a proper IP-Address
+            'instead "0ll " is returned (broken printf("%ull ", ...))
+            Dim ipa As IPAddress = Nothing
+
+            If (Not IPAddress.TryParse(RTrim(Mid(r, 42, 15)), ipa)) Then
+                ipa = New IPAddress({127, 0, 0, 1}) 'use localhost as a quickfix
+            End If
+
             With u
                 .SlotId = Int32.Parse(RTrim(Mid(r, 1, 2)))
                 .UserName = RTrim(Mid(r, 4, 17))
@@ -44,7 +55,7 @@ Public Class PlayerlistPacket
                 .Kills = Int32.Parse(RTrim(Mid(r, 30, 3)))
                 .Deaths = Int32.Parse(RTrim(Mid(r, 34, 3)))
                 .Ping = Int32.Parse(RTrim(Mid(r, 38, 4)))
-                .IPAddress = Net.IPAddress.Parse(RTrim(Mid(r, 42, 15)))
+                .IPAddress = ipa
                 .KeyHash = RTrim(Mid(r, 58, 32))
             End With
             Me.PlayerList.Add(u)
